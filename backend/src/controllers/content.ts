@@ -17,7 +17,6 @@ export async function get(req: Request, res: Response){
         if (entry.AccountId !== req.account.Id)
             throw new RequestError(403, "Cannot get content for someon elses account");
 
-
         const contents: Content[] = await conDao.getByEntry(entryId);
         res.json(contents);
     }catch(err: any){

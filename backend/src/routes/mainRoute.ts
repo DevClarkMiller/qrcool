@@ -1,8 +1,9 @@
 import { Router, Response, Request } from 'express';
-import {Account, Content, ContentType, Entry, EntryContent} from '@prisma/client';
+import { Account, Content, ContentType, Entry, EntryContent } from '@prisma/client';
 
 import EntryDao from '../dao/entryDao.js';
 import EntryContentDao from '../dao/entryContentDao.js';
+import EntryViewDao from 'src/dao/entryViewDao.js';
 import AccountDao from "../dao/accountDao.js";
 import ContentDao from "../dao/contentDao.js";
 import ContentTypeDao from "../dao/contentTypeDao.js";
@@ -10,9 +11,15 @@ import sendFile from '../infrastructure/sendFile.js';
 
 const mainRouter: Router = Router();
 
-async function returnByContentType(res: Response, content: Content): Promise<any>{
+async function returnByContentType(res: Response, content: Content, entryId: number): Promise<any>{
     const conTypeDao = new ContentTypeDao();
     const contentType: ContentType = await conTypeDao.getById(content.ContentTypeId);
+    const evDao = new EntryViewDao();
+
+    // Adds a view if it's loading a file and doesn't have the chance to go through the front-end
+    if (contentType.Name in ["Redirect", "File", "HTML"]){
+        evDao.add(entryId);
+    } 
 
     switch(contentType.Name){
         case "Redirect": 
@@ -65,7 +72,7 @@ mainRouter.get('/:username/:entryName', async (req: Request, res: Response) =>{
         }
 
         const content: Content = await contDao.getById(entryContent.ContentId);
-        await returnByContentType(res, content);
+        await returnByContentType(res, content, entry.Id);
     }catch(err: any){
         console.error(err.message);
         res.status(404).send(`Couldn't get resource: ${err.message}`);

@@ -76,7 +76,8 @@ CREATE TABLE EntryView(
 	Latitude FLOAT NULL,
 	Longitude FLOAT NULL,
 	CONSTRAINT PK_EntryView PRIMARY KEY (Id),
-	CONSTRAINT FK_EntryView_Entry FOREIGN KEY (EntryId) REFERENCES Entry(Id),
+	CONSTRAINT FK_EntryView_Entry FOREIGN KEY (EntryId) REFERENCES Entry(Id)
+		ON DELETE CASCADE, -- Will remove all entry views when an entry is deleted
 	CONSTRAINT FK_EntryView_COntent FOREIGN KEY (ContentId) REFERENCES Content(Id)
 );
 

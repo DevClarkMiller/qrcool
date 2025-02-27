@@ -65,5 +65,5 @@ model EntryView {
   Latitude  Float?
   Longitude Float?
   Content   Content?  @relation(fields: [ContentId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EntryView_COntent")
-  Entry     Entry     @relation(fields: [EntryId], references: [Id], onUpdate: NoAction, map: "FK_EntryView_Entry")
+  Entry     Entry     @relation(fields: [EntryId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_EntryView_Entry")
 }
