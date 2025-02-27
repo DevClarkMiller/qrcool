@@ -5,9 +5,13 @@ import AddEntryModal from "../modals/AddEntryModal";
 import EntryContentModal from "../modals/EntryContentModal";
 import GenericModal from '../modals/GenericModal';
 import QRModal from "../modals/QRModal";
+import { Tooltip } from "react-tooltip";
+
+// Custom hooks
+import useEntryViewCount from '../hooks/content/useEntryViewCount';
 
 // Icons
-import { FaTrash, FaPlusCircle, FaCheckCircle, FaEdit, FaQrcode } from "react-icons/fa";
+import { FaTrash, FaPlusCircle, FaCheckCircle, FaEdit, FaQrcode, FaEye } from "react-icons/fa";
 
 // Context
 import { ContentContext } from "../context/ContentProvider";
@@ -27,12 +31,23 @@ const Entry = ({entry}) =>{
         setQrValue({qr: qrVal, entry: entry});
     }
 
+    const entryViewCount = useEntryViewCount(entry.Id, entryController);
+
     return(
         <li className="w-full flex items-center gap-3">
             <div className="entry text-left flex-grow text-3xl font-semibold overflow-hidden overflow-ellipsis whitespace-nowrap">{entry?.Name}</div>
             <button onClick={onClickQr} className="text-2xl text-light nice-trans hover:text-blue-700">
                 <FaQrcode />
             </button>
+            <a className="text-2xl text-light nice-trans hover:text-blue-700"
+                data-tooltip-id={`entryViewCount${entry.Id}`}
+                data-tooltip-place="top"
+            >
+                <FaEye />
+            </a>
+            <Tooltip id={`entryViewCount${entry.Id}`}>
+                {entryViewCount}
+            </Tooltip>
             <button onClick={onClickEnter} className="text-2xl text-light nice-trans hover:text-blue-700">
                 <FaEdit />
             </button>
@@ -119,9 +134,9 @@ const Entries = () => {
     }, []);
 
     return (
-        <div className="size-full col-flex-center justify-between pt-12">
+        <div className="size-full col-flex-center justify-between pt-12 px-5">
             <h3 className="mb-5 text-3xl font-bold">Your entries</h3>
-            <ul className="flex-grow w-1/2 col-flex-center justify-center gap-3">
+            <ul className="flex-grow w-full lg:w-1/2 col-flex-center justify-center gap-3">
                 <AddEntry />
                 { entries?.map((entry) =><Entry key={entry?.Name} entry={entry} />)}
                 <EntryContentModal />

@@ -1,5 +1,8 @@
 import { Route, Routes } from 'react-router-dom';
 
+// CSS
+import 'react-tooltip/dist/react-tooltip.css' 
+
 // Components
 import Header from './components/Header';
 

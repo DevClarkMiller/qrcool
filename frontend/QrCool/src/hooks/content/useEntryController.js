@@ -2,13 +2,19 @@ import { useMemo } from "react";
 
 import Controller from "../../tools/controller";
 
-
-
 function useEntryController(appContext, entries, setEntries){
     const entryController = useMemo(() =>{
         class EntryController extends Controller{
             constructor(context){
               super(context);
+            }
+
+            async getViewCount(entryId){
+              return new Promise((resolve) =>{
+                super.get(`/entryView/${entryId}`, response =>{
+                  resolve(response.data);
+                });
+              });
             }
         
             async get(){

@@ -14,6 +14,8 @@ import contentTypeRouter from "./routes/contentType.js";
 import entryRouter from "./routes/entry.js";
 import entryContentRouter from "./routes/entryContent.js";
 import contentRouter from "./routes/content.js";
+import entryViewRouter from "./routes/entryView.js";
+
 import FileManager from "./infrastructure/fileManager.js";
 import fileUpload from 'express-fileupload';
 
@@ -49,6 +51,7 @@ app.use('/api/contentType', contentTypeRouter);
 app.use('/api/entry', entryRouter)
 app.use('/api/entryContent', entryContentRouter);
 app.use('/api/content', contentRouter)
+app.use('/api/entryView', entryViewRouter);
 app.use('/', mainRouter);
 
 const port = process.env.PORT || 5000;
