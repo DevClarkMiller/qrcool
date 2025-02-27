@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // Base directory for module resolution
+    "lib": ["es2023"],
+    "module": "ESNext", // Use "ESNext" for ES modules
+    "moduleResolution": "Node", // Use "Node" for Node.js module resolution
+    "outDir": "./dist", // Output directory for compiled files
+    "rootDir": "./src", // Source directory
+    "esModuleInterop": true, // Enable ES module interop,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+  },
+  "include": ["src/**/*.ts"]
+}

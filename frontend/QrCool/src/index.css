@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* @import "tailwindcss"; */
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+body{
+  @apply bg-base;
+}
+
+
+@layer components{
+  .card{
+    @apply rounded-lg bg-regular p-3 text-center gap-5 shadow-lg;
+  }
+
+  .nice-trans{
+    @apply transition-all duration-200 ease-in-out;
+  }
+  
+  .col-flex-center{
+    @apply flex flex-col items-center;
+  }
+
+  .text-slider-hide{
+    @apply blur-xl transform translate-x-20 opacity-0;
+  }
+
+  .text-slider-visible{
+    @apply blur-none opacity-100 transform -translate-x-20;
+  }
+}

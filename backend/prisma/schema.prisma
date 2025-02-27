@@ -1,0 +1,56 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DB_URL")
+}
+
+model Account {
+  Id       Int     @id(map: "PK_Account") @default(autoincrement())
+  Email    String  @unique(map: "AK_Account_Email") @db.VarChar(100)
+  Username String  @unique(map: "AK_Account_Username") @db.VarChar(50)
+  Password String  @db.VarChar(120)
+  Entry    Entry[]
+
+  @@index([Email], map: "IX_Account_Email")
+  @@index([Username], map: "IX_Account_Username")
+}
+
+model Content {
+  Id            Int            @id(map: "PK_Content") @default(autoincrement())
+  Name          String         @db.VarChar(100)
+  Text          String         @db.VarChar(500)
+  Path          String?        @db.VarChar(255)
+  ContentTypeId Int
+  ContentType   ContentType    @relation(fields: [ContentTypeId], references: [Id], onUpdate: NoAction, map: "FK_Content_ContentType")
+  EntryContent  EntryContent[]
+}
+
+model ContentType {
+  Id      Int       @id(map: "PK_ContentType") @default(autoincrement())
+  Name    String    @db.VarChar(50)
+  Content Content[]
+}
+
+model Entry {
+  Id           Int            @id(map: "PK_Entry") @default(autoincrement())
+  AccountId    Int
+  Name         String         @db.VarChar(100)
+  Account      Account        @relation(fields: [AccountId], references: [Id], onUpdate: NoAction, map: "FK_Entry_Account")
+  EntryContent EntryContent[]
+}
+
+model EntryContent {
+  Id        Int      @id(map: "PK_EntryContent") @default(autoincrement())
+  EntryId   Int
+  ContentId Int
+  IsActive  Boolean?
+  Content   Content  @relation( onDelete: Cascade, fields: [ContentId], references: [Id], onUpdate: NoAction, map: "FK_EntryContent_Content")
+  Entry     Entry    @relation(fields: [EntryId], references: [Id], onUpdate: NoAction, map: "FK_EntryContent_Entry")
+
+  @@unique([EntryId, ContentId], map: "AK_EntryContent")
+  @@index([ContentId, EntryId], map: "IX_EntryContent_Content_Entry")
+  @@index([EntryId, ContentId], map: "IX_EntryContent_Entry_Content")
+}

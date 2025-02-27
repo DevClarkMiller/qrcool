@@ -1,0 +1,52 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p .",
+    "start:dev": "cross-env NODE_ENV=development npx tsx .\\src\\index.ts",
+    "start:prod": "cross-env NODE_ENV=production npx tsx .\\src\\index.ts",
+    "start": "npx tsx .\\src\\index.ts",
+    "test:dev": "cross-env NODE_ENV=development tsc && jest",
+    "test:prod": "cross-env NODE_ENV=production jest"
+  },
+  "keywords": [],
+  "author": "Clark Miller",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@jest/globals": "^29.7.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/express-fileupload": "^1.5.1",
+    "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.8",
+    "@types/minio": "^7.1.0",
+    "babel-jest": "^29.7.0",
+    "esm": "^3.2.25",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.6",
+    "typescript": "^5.7.3"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.3.1",
+    "@types/cookie-parser": "^1.4.8",
+    "bcryptjs": "^3.0.0",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "cross-env": "^7.0.3",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-fileupload": "^1.5.1",
+    "fs": "^0.0.1-security",
+    "jsonwebtoken": "^9.0.2",
+    "minio": "^8.0.4",
+    "nodemon": "^3.1.9",
+    "prisma": "^6.3.1",
+    "ts-node": "^10.9.2"
+  }
+}

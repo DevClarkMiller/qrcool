@@ -1,0 +1,44 @@
+import { Route, Routes } from 'react-router-dom';
+
+// Components
+import Header from './components/Header';
+
+// Pages
+import Login from './pages/account/Login';
+import CreateAccount from './pages/account/CreateAccount';
+import Home from './pages/Home';
+import Entries from './pages/Entries';
+import Anonymous from './pages/Anonymous';
+import NotFound from './pages/NotFound';
+
+// Context
+import AppProvider from './context/AppProvider';
+import AccountProvider from './context/AccountProvider';
+import ContentProvider from './context/ContentProvider';
+
+
+function App() {
+  return (
+    <AppProvider>
+      <AccountProvider>
+        <ContentProvider>
+          <div className='App gap-5 h-screen p-0 text-light col-flex-center justify-between'>
+            <Header/>
+            <main className='size-full col-flex-center flex-grow justify-center'>
+              <Routes>
+                <Route path ='/' element = {<Home />} />
+                <Route path='/login' element={ <Login /> } />
+                <Route path='/createAccount' element={ <CreateAccount /> } />
+                <Route path ='/anonymous/:contentType/:contentId' element={<Anonymous />} />
+                <Route path='/entries' element= {<Entries />}/>
+                <Route path='*' element={<NotFound/>} />
+              </Routes>
+            </main>
+          </div>
+        </ContentProvider>
+      </AccountProvider>
+    </AppProvider>
+  )
+}
+
+export default App;
