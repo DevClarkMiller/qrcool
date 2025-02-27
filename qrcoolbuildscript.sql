@@ -68,6 +68,20 @@ CREATE INDEX IX_EntryContent_Content_Entry ON EntryContent(ContentId, EntryId);
 
 GO
 
+CREATE TABLE EntryView(
+	Id INT IDENTITY,
+	EntryId INT NOT NULL,
+	ContentId INT NULL, -- NULL BECAUSE THE CONTENT COULD BE DELETED OR SOMEHOW UNKNOWN
+	Timestamp DATETIME NULL,
+	Latitude FLOAT NULL,
+	Longitude FLOAT NULL,
+	CONSTRAINT PK_EntryView PRIMARY KEY (Id),
+	CONSTRAINT FK_EntryView_Entry FOREIGN KEY (EntryId) REFERENCES Entry(Id),
+	CONSTRAINT FK_EntryView_COntent FOREIGN KEY (ContentId) REFERENCES Content(Id)
+);
+
+GO
+
 -- Some default entries for ContentType
 INSERT INTO ContentType(Name) VALUES
 ('Redirect'), ('HTML'), 
