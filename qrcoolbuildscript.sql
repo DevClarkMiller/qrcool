@@ -71,16 +71,14 @@ GO
 CREATE TABLE EntryView(
 	Id INT IDENTITY,
 	EntryId INT NOT NULL,
-	ContentId INT NULL, -- NULL BECAUSE THE CONTENT COULD BE DELETED OR SOMEHOW UNKNOWN
+	ContentId INT NULL, -- Doesn't have a foreign key
 	Timestamp DATETIME NOT NULL DEFAULT GETDATE(),
 	Latitude FLOAT NULL,
 	Longitude FLOAT NULL,
 	CONSTRAINT PK_EntryView PRIMARY KEY (Id),
 	CONSTRAINT FK_EntryView_Entry FOREIGN KEY (EntryId) REFERENCES Entry(Id)
 		ON DELETE CASCADE, -- Will remove all entry views when an entry is deleted
-	CONSTRAINT FK_EntryView_COntent FOREIGN KEY (ContentId) REFERENCES Content(Id)
 );
-
 
 GO
 

@@ -1,7 +1,6 @@
-import Dao from "./dao";
-import { db } from "src";
-import { Location } from "src/types";
-import currentDate from "src/infrastructure/currentDate";
+import Dao  from "./dao.js";
+import { db } from "../index.js";
+import { Location } from '../types.js';
 
 export default class EntryViewDao extends Dao{
     public constructor(){ super(db.entryView); }

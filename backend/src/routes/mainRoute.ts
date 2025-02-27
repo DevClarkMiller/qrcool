@@ -3,7 +3,7 @@ import { Account, Content, ContentType, Entry, EntryContent } from '@prisma/clie
 
 import EntryDao from '../dao/entryDao.js';
 import EntryContentDao from '../dao/entryContentDao.js';
-import EntryViewDao from 'src/dao/entryViewDao.js';
+import EntryViewDao from '../dao/entryViewDao.js';
 import AccountDao from "../dao/accountDao.js";
 import ContentDao from "../dao/contentDao.js";
 import ContentTypeDao from "../dao/contentTypeDao.js";
@@ -17,10 +17,9 @@ async function returnByContentType(res: Response, entryContent: EntryContent, co
     const evDao = new EntryViewDao();
 
     // Adds a view if it's loading a file and doesn't have the chance to go through the front-end
-    if (contentType.Name in ["Redirect", "File", "HTML"]){
-        evDao.add(entryId);
-    } 
-
+    if (["Redirect", "File", "HTML"].includes(contentType.Name))
+        evDao.add(entryId, content.Id);
+    
     switch(contentType.Name){
         case "Redirect": 
             res.redirect(content.Text);

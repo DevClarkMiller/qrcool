@@ -51,18 +51,21 @@ const AppProvider = ({children}) => {
           handleErr(err);
       }
   
-      static async get(route, callback, onErr){
+      static async get(route, callback, onErr, params = null){
         try{
-            const response = await api.get(route, { withCredentials: true });
+            const response = await api.get(route, { 
+              params: params,
+              withCredentials: true });
             callback(response);
         }catch(err){
           this.checkErrHandle(onErr, err);
         }
       } 
 
-      static async getBlob(route, callback, onErr){
+      static async getBlob(route, callback, onErr, params = null){
         try{
-            const response = await api.get(route, { withCredentials: true, responseType: 'blob' });
+            const response = await api.get(route, { params: params, 
+              withCredentials: true, responseType: 'blob' });
             callback(response);
         }catch(err){
           this.checkErrHandle(onErr, err);

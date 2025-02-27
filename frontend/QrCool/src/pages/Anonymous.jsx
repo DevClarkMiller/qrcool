@@ -52,7 +52,22 @@ function useContent(){
     const { entryContentController, anonymousData} = useContext(ContentContext);
     
     const params = useParams();
+
     const [content, setContent] = useState(<></>);
+    const [latitude, setLatitude] = useState('');
+    const [longitude, setLongitude] = useState('');
+    const [loading, setLoading] = useState(true);
+ 
+    useEffect(() =>{
+        navigator.geolocation.getCurrentPosition((pos) =>{
+            setLatitude(pos.coords.latitude);
+            setLongitude(pos.coords.longitude);
+            setLoading(false);
+        }, err =>{
+            console.error(err);
+            setLoading(false);
+        });
+    }, []);
 
     useEffect(() =>{
         switch(params?.contentType){
@@ -72,8 +87,13 @@ function useContent(){
     }, [anonymousData]);
 
     useEffect(() => {
-        entryContentController.getAnonymous(params?.entryContentId, params?.contentType);
-    }, [params?.contentId]);
+        if (!loading){
+            entryContentController.getAnonymous(params?.entryContentId, params?.contentType, {
+                Longitude: longitude,
+                Latitude: latitude
+            });
+        }
+    }, [params?.contentId, loading]);
 
     return content;
 }

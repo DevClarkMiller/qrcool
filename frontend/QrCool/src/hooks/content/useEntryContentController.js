@@ -120,19 +120,19 @@ function useEntryContentController(
           });
         }
 
-        async getAnonymous(entryContentId, contentType){
+        async getAnonymous(entryContentId, contentType, location = null){
           switch(contentType){
           case "Text":
-              super.get(`/entryContent/anonymous/${entryContentId}`, response =>{
+            super.get(`/entryContent/anonymous/${entryContentId}`, response =>{
               this.appContext.setHeaderStatus("text-green-500", "Found content", 2500);
               setAnonymousData(response.data);
-              });
-              break;
+            }, null, location);
+            break;
           default:
-              super.getBlob(`/entryContent/anonymous/${entryContentId}`, response =>{
+            super.getBlob(`/entryContent/anonymous/${entryContentId}`, response =>{
               this.appContext.setHeaderStatus("text-green-500", "Found content", 2500);
               setAnonymousData(response.data);
-              });
+            }, null, location);
           }
         }
       }

@@ -18,6 +18,8 @@ INNER JOIN Entry e
 INNER JOIN ContentType ct
 	ON c.ContentTypeId = ct.Id;
 
+SELECT * FROM EntryView;
+
 --SELECT * FROM EntryContent;
 --SELECT * FROM Content;
 --SELECT * FROM ContentType;

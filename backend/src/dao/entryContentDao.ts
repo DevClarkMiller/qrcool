@@ -55,7 +55,7 @@ export default class EntryContentDao extends Dao{
                 await this.setActive(ecToSetActive);
             await conDao.delete(entryContent.ContentId); 
         }catch(err: any){
-            console.error();
+            console.error(err);
             console.error("Couldn't delete entryContent");
         }
     }

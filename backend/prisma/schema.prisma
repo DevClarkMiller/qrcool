@@ -26,7 +26,6 @@ model Content {
   ContentTypeId Int
   ContentType   ContentType    @relation(fields: [ContentTypeId], references: [Id], onUpdate: NoAction, map: "FK_Content_ContentType")
   EntryContent  EntryContent[]
-  EntryView     EntryView[]
 }
 
 model ContentType {
@@ -61,9 +60,8 @@ model EntryView {
   Id        Int      @id(map: "PK_EntryView") @default(autoincrement())
   EntryId   Int
   ContentId Int?
-  Timestamp DateTime @default(now(), map: "DF__EntryView__Times__6477ECF3") @db.DateTime
+  Timestamp DateTime @default(now(), map: "DF__EntryView__Times__693CA210") @db.DateTime
   Latitude  Float?
   Longitude Float?
-  Content   Content? @relation(fields: [ContentId], references: [Id], onDelete: NoAction, onUpdate: NoAction, map: "FK_EntryView_COntent")
   Entry     Entry    @relation(fields: [EntryId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_EntryView_Entry")
 }
