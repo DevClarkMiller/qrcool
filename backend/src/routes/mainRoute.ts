@@ -11,7 +11,7 @@ import sendFile from '../infrastructure/sendFile.js';
 
 const mainRouter: Router = Router();
 
-async function returnByContentType(res: Response, content: Content, entryId: number): Promise<any>{
+async function returnByContentType(res: Response, entryContent: EntryContent, content: Content, entryId: number): Promise<any>{
     const conTypeDao = new ContentTypeDao();
     const contentType: ContentType = await conTypeDao.getById(content.ContentTypeId);
     const evDao = new EntryViewDao();
@@ -34,7 +34,7 @@ async function returnByContentType(res: Response, content: Content, entryId: num
         default: 
             // Don't even worry about fetching the content, if it's a file
             // The site will do so and display it for the user
-            res.redirect(`${process.env.CLIENT_URL}/anonymous/${contentType.Name}/${content.Id}`);
+            res.redirect(`${process.env.CLIENT_URL}/anonymous/${contentType.Name}/${entryContent.Id}`);
             break;
     }
 }
@@ -72,7 +72,7 @@ mainRouter.get('/:username/:entryName', async (req: Request, res: Response) =>{
         }
 
         const content: Content = await contDao.getById(entryContent.ContentId);
-        await returnByContentType(res, content, entry.Id);
+        await returnByContentType(res, entryContent, content, entry.Id);
     }catch(err: any){
         console.error(err.message);
         res.status(404).send(`Couldn't get resource: ${err.message}`);

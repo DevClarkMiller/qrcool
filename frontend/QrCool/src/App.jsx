@@ -29,7 +29,7 @@ function App() {
                 <Route path ='/' element = {<Home />} />
                 <Route path='/login' element={ <Login /> } />
                 <Route path='/createAccount' element={ <CreateAccount /> } />
-                <Route path ='/anonymous/:contentType/:contentId' element={<Anonymous />} />
+                <Route path ='/anonymous/:contentType/:entryContentId' element={<Anonymous />} />
                 <Route path='/entries' element= {<Entries />}/>
                 <Route path='*' element={<NotFound/>} />
               </Routes>

@@ -7,8 +7,7 @@ export default class EntryDao extends Dao{
     public constructor(){ super(db.entry); }
 
     /*Brief: Deletes everything in the entries location on minio
-     * 
-     */
+    */
     public async deleteEntryFiles(entry: Entry, account: Account){
         try{
             await fileManager.deleteFolder(BUCKET_NAME, `${account.Username}/${entry.Name}/`);

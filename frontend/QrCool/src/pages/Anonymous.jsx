@@ -29,7 +29,6 @@ function VideoContent({data, blobURL}){
         <BlobContent type="video/mp4" data={data} loadingMsg="Loading video...">
             <video controls className="w-full " src={blobURL}/>
         </BlobContent>
-        
     );
 }
 
@@ -50,7 +49,7 @@ function AudioContent({data, blobURL}){
 }
 
 function useContent(){
-    const {contentController, anonymousData} = useContext(ContentContext);
+    const { entryContentController, anonymousData} = useContext(ContentContext);
     
     const params = useParams();
     const [content, setContent] = useState(<></>);
@@ -73,7 +72,7 @@ function useContent(){
     }, [anonymousData]);
 
     useEffect(() => {
-        contentController.getAnonymous(params?.contentId, params?.contentType);
+        entryContentController.getAnonymous(params?.entryContentId, params?.contentType);
     }, [params?.contentId]);
 
     return content;

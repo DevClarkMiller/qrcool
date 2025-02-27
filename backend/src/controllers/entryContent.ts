@@ -1,11 +1,16 @@
 import { Request, Response } from "express";
 import EntryContentDao from "../dao/entryContentDao.js";
-import { Content, Entry, EntryContent } from "@prisma/client";
+import { Content, Entry, EntryContent, ContentType } from "@prisma/client";
 import EntryDao from "../dao/entryDao.js";
+import ContentDao from "src/dao/contentDao.js";
+import ContentTypeDao from "src/dao/contentTypeDao.js";
 import { handleErr, RequestError } from "../infrastructure/errors.js";
+import sendFile from "src/infrastructure/sendFile.js";
+
+import { Location } from "src/types.js";
 
 import { FileArray, UploadedFile } from "express-fileupload";
-import { db } from "src/index.js";
+import EntryViewDao from "src/dao/entryViewDao.js";
 
 export async function setActiveContent(req: Request, res: Response){
     try{
@@ -148,6 +153,46 @@ export async function postFile(req: Request, res: Response){
 
         res.send("Successfully uploaded file");
     }catch(err: any | RequestError){
+        handleErr(res, err);
+    }
+}
+
+/*Brief: Fetches an entries content
+*/
+export async function getAnonymous(req: Request, res: Response){
+    try{
+        const entryContentId: number = parseInt(req.params.entryContentId as string);
+        let location: Location | null;
+        
+        if (req.query.Longitude && req.query.Latitude){
+            location = {
+                Longitude: parseFloat(req.query.Longitude as string),
+                Latitude: parseFloat(req.query.Latitude as string)
+            };
+        }
+
+        const evDao: EntryViewDao = new EntryViewDao();
+        const ecDao: EntryContentDao = new EntryContentDao();
+        const conDao: ContentDao = new ContentDao();
+        const contTypeDao: ContentTypeDao = new ContentTypeDao();
+
+        const entryContent: EntryContent = await ecDao.getById(entryContentId);
+
+        const content: Content = await conDao.getById(entryContent.ContentId);
+
+        if (content === null)
+            throw new RequestError(400, 'Content not found');
+
+        // Check if it's a file
+        const contentType: ContentType = await contTypeDao.getById(content.ContentTypeId);
+
+        await evDao.add(entryContent.EntryId, entryContent.ContentId, location);
+
+        if (contentType.Name === "Text")
+            res.send(content.Text);
+        else
+            await sendFile(res, content); // Sends the file to the requester
+    }catch(err: any){
         handleErr(res, err);
     }
 }

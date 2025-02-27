@@ -29,8 +29,8 @@ const ContentProvider = ({children}) =>{
   const {contentType, contentTypeController} = useContentTypeController(context, account);
 
   const entryController = useEntryController(context, entries, setEntries);
-  const { file, setFile, fileRef, entryContent, entryContentRed, entryContentRef, entryContentController } = useEntryContentController(context, entryController, setActiveEntry, setShowModal);
-  const { anonymousData, contentController } = useContentController(context, entryContentRef)
+  const { anonymousData, file, setFile, fileRef, entryContent, entryContentRed, entryContentRef, entryContentController } = useEntryContentController(context, entryController, setActiveEntry, setShowModal);
+  const { contentController } = useContentController(context, entryContentRef)
 
   return(
       <ContentContext.Provider value={{ entries, entryContent, entryContentRed, contentType, activeEntry, entryController, entryContentController, contentTypeController, contentController, entryContentRef, entryName, setEntryName, anonymousData, file, setFile, fileRef, qrValue, setQrValue}}>
