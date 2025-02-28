@@ -2,7 +2,7 @@ import { Account } from "@prisma/client";
 import jwt from 'jsonwebtoken'; const { sign, verify } = jwt;
 import { Response } from "express";
 import { genSaltSync } from "bcryptjs";
-import loadEnv from "./loadEnv.js";
+import loadEnv from "./loadEnv";
 
 loadEnv();
 

@@ -1,10 +1,9 @@
 import { Request, Response } from "express";
-import { Account, Entry } from "@prisma/client";
-import EntryDao from "../dao/entryDao.js";
-import EntryContentDao from "../dao/entryContentDao.js";
+import { Entry } from "@prisma/client";
+import EntryDao from "../dao/entryDao";
 
 // Custom excetions
-import { RequestError, handleErr } from "../infrastructure/errors.js";
+import { RequestError, handleErr } from "../infrastructure/errors";
 
 export async function add(req: Request, res: Response){
     try{

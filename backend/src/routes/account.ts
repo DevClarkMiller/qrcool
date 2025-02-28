@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express";
-import cookieJwtAuth from "../middleware/cookieJwtAuth.js";
-import { accountLogin, auth, create, count } from "../controllers/account.js";
+import cookieJwtAuth from "../middleware/cookieJwtAuth";
+import { accountLogin, auth, create, count } from "../controllers/account";
 
 const accountRouter: Router = express.Router();
 

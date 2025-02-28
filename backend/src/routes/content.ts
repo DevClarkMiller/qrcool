@@ -1,6 +1,6 @@
 import express, { Router } from "express";
-import cookieJwtAuth from "../middleware/cookieJwtAuth.js";
-import { get, getAnonymous } from "../controllers/content.js";
+import cookieJwtAuth from "../middleware/cookieJwtAuth";
+import { get, getAnonymous } from "../controllers/content";
 
 const contentRouter: Router = express.Router();
 

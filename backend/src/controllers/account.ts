@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Account } from "@prisma/client";
-import { login, register } from '../infrastructure/accountValidation.js';
-import AccountDao from "../dao/accountDao.js";
-import { handleErr } from '../infrastructure/errors.js';
+import { login, register } from '../infrastructure/accountValidation';
+import AccountDao from "../dao/accountDao";
+import { handleErr } from '../infrastructure/errors';
 
 export async function accountLogin(req: Request, res: Response){
     try{

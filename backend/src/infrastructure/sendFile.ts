@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { fileManager, BUCKET_NAME } from "../index.js";
+import { fileManager, BUCKET_NAME } from "../index";
 import { Content } from "@prisma/client";
 
 export default async function sendFile(res: Response, content: Content, contentType: string = "", contentDisposition = true){

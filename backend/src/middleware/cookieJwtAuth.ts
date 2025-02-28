@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from 'jsonwebtoken'; const { verify, sign } = jwt;
 import { Account } from "@prisma/client";
-import { SECRET } from "../infrastructure/token.js";
+import { SECRET } from "../infrastructure/token";
 
 export default async function cookieJwtAuth(req: Request, res: Response, next: NextFunction){
     const token: string = req.cookies?.token;

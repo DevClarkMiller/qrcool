@@ -1,6 +1,7 @@
-import Dao  from "./dao.js";
-import { db } from "../index.js";
-import { Location } from '../types.js';
+import Dao  from "./dao";
+import { db } from "../index";
+import { Location } from '../types';
+import { EntryView } from "@prisma/client";
 
 export default class EntryViewDao extends Dao{
     public constructor(){ super(db.entryView); }
@@ -38,6 +39,15 @@ export default class EntryViewDao extends Dao{
         }catch(err: any){
             console.error(err.message);
             throw err;
+        }
+    }
+
+    public async getByEntry(entryId: number): Promise<EntryView[] | null>{
+        try{
+            return this.getSome({ EntryId: entryId});
+        }catch(err: any){
+            console.error(err.message);
+            return [];
         }
     }
 }

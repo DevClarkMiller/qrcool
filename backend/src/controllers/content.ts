@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 import { Content, ContentType, Entry } from "@prisma/client";
-import EntryDao from "../dao/entryDao.js";
-import ContentDao from "../dao/contentDao.js";
-import ContentTypeDao from "../dao/contentTypeDao.js";
-import { handleErr, RequestError } from "../infrastructure/errors.js";
-import sendFile from "../infrastructure/sendFile.js";
+import EntryDao from "../dao/entryDao";
+import ContentDao from "../dao/contentDao";
+import ContentTypeDao from "../dao/contentTypeDao";
+import { handleErr, RequestError } from "../infrastructure/errors";
+import sendFile from "../infrastructure/sendFile";
 
 export async function get(req: Request, res: Response){
     try{

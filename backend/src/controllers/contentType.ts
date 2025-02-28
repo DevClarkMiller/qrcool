@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
 import { ContentType } from "@prisma/client";
-import ContentTypeDao from "../dao/contentTypeDao.js";
+import ContentTypeDao from "../dao/contentTypeDao";
 
 
 export async function all(req: Request, res: Response){

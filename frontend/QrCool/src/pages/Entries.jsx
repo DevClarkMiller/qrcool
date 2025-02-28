@@ -136,7 +136,7 @@ const Entries = () => {
     return (
         <div className="size-full col-flex-center justify-between pt-12 px-5">
             <h3 className="mb-5 text-3xl font-bold">Your entries</h3>
-            <ul className="flex-grow w-full lg:w-1/2 col-flex-center justify-center gap-3">
+            <ul className="flex-grow nice-trans w-full lg:w-1/2 col-flex-center justify-center gap-3">
                 <AddEntry />
                 { entries?.map((entry) =><Entry key={entry?.Name} entry={entry} />)}
                 <EntryContentModal />

@@ -2,21 +2,21 @@ import express, { Express, Request, Response } from "express";
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { PrismaClient } from "@prisma/client";
-import quotes from './quotes.js';
+import quotes from './quotes';
 
-import loadEnv from "./infrastructure/loadEnv.js";
+import loadEnv from "./infrastructure/loadEnv";
 loadEnv();
 
 // Routes
-import accountRouter from "./routes/account.js";
-import mainRouter from "./routes/mainRoute.js";
-import contentTypeRouter from "./routes/contentType.js";
-import entryRouter from "./routes/entry.js";
-import entryContentRouter from "./routes/entryContent.js";
-import contentRouter from "./routes/content.js";
-import entryViewRouter from "./routes/entryView.js";
+import accountRouter from "./routes/account";
+import mainRouter from "./routes/mainRoute";
+import contentTypeRouter from "./routes/contentType";
+import entryRouter from "./routes/entry";
+import entryContentRouter from "./routes/entryContent";
+import contentRouter from "./routes/content";
+import entryViewRouter from "./routes/entryView";
 
-import FileManager from "./infrastructure/fileManager.js";
+import FileManager from "./infrastructure/fileManager";
 import fileUpload from 'express-fileupload';
 
 export const db = new PrismaClient();

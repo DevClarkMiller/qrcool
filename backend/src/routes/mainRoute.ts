@@ -1,13 +1,13 @@
 import { Router, Response, Request } from 'express';
 import { Account, Content, ContentType, Entry, EntryContent } from '@prisma/client';
 
-import EntryDao from '../dao/entryDao.js';
-import EntryContentDao from '../dao/entryContentDao.js';
-import EntryViewDao from '../dao/entryViewDao.js';
-import AccountDao from "../dao/accountDao.js";
-import ContentDao from "../dao/contentDao.js";
-import ContentTypeDao from "../dao/contentTypeDao.js";
-import sendFile from '../infrastructure/sendFile.js';
+import EntryDao from '../dao/entryDao';
+import EntryContentDao from '../dao/entryContentDao';
+import EntryViewDao from '../dao/entryViewDao';
+import AccountDao from "../dao/accountDao";
+import ContentDao from "../dao/contentDao";
+import ContentTypeDao from "../dao/contentTypeDao";
+import sendFile from '../infrastructure/sendFile';
 
 const mainRouter: Router = Router();
 

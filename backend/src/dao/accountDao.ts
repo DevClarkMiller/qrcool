@@ -1,5 +1,5 @@
-import Dao  from "./dao.js";
-import { db } from "../index.js";
+import Dao  from "./dao";
+import { db } from "../index";
 import { Account } from "@prisma/client";
 
 export default class AccountDao extends Dao{

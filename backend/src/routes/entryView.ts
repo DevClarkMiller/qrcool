@@ -1,5 +1,5 @@
 import express, { Router } from "express";
-import { count } from "../controllers/entryView.js";
+import { count } from "../controllers/entryView";
 
 const entryViewRouter: Router = express.Router();
 

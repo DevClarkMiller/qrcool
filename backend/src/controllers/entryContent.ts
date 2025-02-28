@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import EntryContentDao from "../dao/entryContentDao.js";
+import EntryContentDao from "../dao/entryContentDao";
 import { Content, Entry, EntryContent, ContentType } from "@prisma/client";
-import EntryDao from "../dao/entryDao.js";
-import ContentDao from "../dao/contentDao.js";
-import ContentTypeDao from "../dao/contentTypeDao.js";
-import { handleErr, RequestError } from "../infrastructure/errors.js";
-import sendFile from "../infrastructure/sendFile.js";
+import EntryDao from "../dao/entryDao";
+import ContentDao from "../dao/contentDao";
+import ContentTypeDao from "../dao/contentTypeDao";
+import { handleErr, RequestError } from "../infrastructure/errors";
+import sendFile from "../infrastructure/sendFile";
 
-import { Location } from "../types.js";
+import { Location } from "../types";
 
 import { FileArray, UploadedFile } from "express-fileupload";
-import EntryViewDao from "../dao/entryViewDao.js";
+import EntryViewDao from "../dao/entryViewDao";
 
 export async function setActiveContent(req: Request, res: Response){
     try{

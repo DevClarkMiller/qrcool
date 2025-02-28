@@ -1,9 +1,9 @@
-import Dao  from "./dao.js";
-import { BUCKET_NAME, db } from "../index.js";
+import Dao  from "./dao";
+import { BUCKET_NAME, db } from "../index";
 import { EntryContent, Content, Account, Entry } from "@prisma/client";
-import ContentDao from "./contentDao.js";
+import ContentDao from "./contentDao";
 import { UploadedFile } from "express-fileupload";
-import { fileManager } from "../index.js";
+import { fileManager } from "../index";
 import stream from 'stream';
 
 export default class EntryContentDao extends Dao{

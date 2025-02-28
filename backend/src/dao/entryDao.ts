@@ -1,6 +1,6 @@
-import Dao  from "./dao.js";
-import EntryContentDao from "./entryContentDao.js";
-import { BUCKET_NAME, db, fileManager } from "../index.js";
+import Dao from "./dao";
+import EntryContentDao from "./entryContentDao";
+import { BUCKET_NAME, db, fileManager } from "../index";
 import { Account, Entry } from "@prisma/client";
 
 export default class EntryDao extends Dao{

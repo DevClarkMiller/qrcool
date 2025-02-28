@@ -1,9 +1,9 @@
 import * as bcrypt from 'bcryptjs'; 
-import AccountDao from '../dao/accountDao.js';
+import AccountDao from '../dao/accountDao';
 import { Account } from '@prisma/client';
-import { signToken } from './token.js';
+import { signToken } from './token';
 import { Response } from 'express';
-import { AccountError } from './errors.js';
+import { AccountError } from './errors';
 
 function throwIfExists(account: Account | null, field: string){
     if (account)
