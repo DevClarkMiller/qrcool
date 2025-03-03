@@ -12,6 +12,7 @@ model Account {
   Email    String  @unique(map: "AK_Account_Email") @db.VarChar(100)
   Username String  @unique(map: "AK_Account_Username") @db.VarChar(50)
   Password String  @db.VarChar(120)
+  IsActive Boolean @default(false, map: "DF__Account__IsActiv__6B24EA82")
   Entry    Entry[]
 
   @@index([Email], map: "IX_Account_Email")
@@ -64,4 +65,6 @@ model EntryView {
   Latitude  Float?
   Longitude Float?
   Entry     Entry    @relation(fields: [EntryId], references: [Id], onDelete: Cascade, onUpdate: NoAction, map: "FK_EntryView_Entry")
+
+  @@index([EntryId], map: "IX_EntryView_Entry")
 }

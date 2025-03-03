@@ -11,7 +11,8 @@ CREATE TABLE Account(
 	Id INT IDENTITY,
 	Email VARCHAR(100) NOT NULL,
 	Username VARCHAR(50) NOT NULL,
-	Password VARCHAR(120) NOT NULL, -- Needs to be big becuase it's a hash
+	Password VARCHAR(120) NOT NULL, -- Needs to be big becuase it's a hash,
+	IsActive BIT NOT NULL DEFAULT 0,
 	CONSTRAINT PK_Account PRIMARY KEY (Id),
 	CONSTRAINT AK_Account_Email UNIQUE(Email),
 	CONSTRAINT AK_Account_Username UNIQUE(Username)
@@ -28,7 +29,6 @@ CREATE TABLE ContentType(
 	Name VARCHAR(50) NOT NULL,
 	CONSTRAINT PK_ContentType PRIMARY KEY (Id)
 );
-
 
 CREATE TABLE Content(
 	Id INT IDENTITY,
@@ -82,12 +82,11 @@ CREATE TABLE EntryView(
 
 GO
 
+CREATE INDEX IX_EntryView_Entry ON EntryView(EntryId);
+GO
+
 -- Some default entries for ContentType
 INSERT INTO ContentType(Name) VALUES
 ('Redirect'), ('HTML'), 
 ('Image'), ('Video'), ('Audio'),
-('Text'),('File')
-
-
-
-SELECT * FROM ContentType;
+('Text'),('File');
