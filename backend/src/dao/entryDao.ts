@@ -64,9 +64,6 @@ export default class EntryDao extends Dao{
         }
     }
 
-    public async add(data: any): Promise<any>;
-    public async add(data: any, accountId: number): Promise<any>;
-
     public async add(data: any, accountId?: number): Promise<any>{
         if (!accountId)
             return await super.add(data);
