@@ -1,4 +1,4 @@
-import { useEffect, useContext, useState, useMemo } from "react"
+import { useEffect, useContext, useMemo } from "react"
 
 // Components
 import AddEntryModal from "../modals/AddEntryModal";
@@ -12,6 +12,8 @@ import useEntryViewCount from '../hooks/content/useEntryViewCount';
 
 // Icons
 import { FaTrash, FaPlusCircle, FaCheckCircle, FaEdit, FaQrcode, FaEye } from "react-icons/fa";
+import { TbReportAnalytics } from "react-icons/tb";
+
 
 // Context
 import { ContentContext } from "../context/ContentProvider";
@@ -24,6 +26,10 @@ const Entry = ({entry}) =>{
     const { account } = useContext(AccountContext);
     const onClickEnter = async () =>{ entryContentController.get(entry); }
     const onClickDelete = () => { entryController.delete(entry.Id); }
+
+    const onClickReport = () =>{
+        console.log("REPORTING");
+    }
 
     const onClickQr = () =>{
         setShowQrModal(true);
@@ -39,6 +45,10 @@ const Entry = ({entry}) =>{
             <button onClick={onClickQr} className="text-2xl text-light nice-trans hover:text-blue-700">
                 <FaQrcode />
             </button>
+            {
+            <button onClick={onClickReport} className="text-2xl text-light nice-trans hover:text-blue-700">
+                <TbReportAnalytics />
+            </button>}
             <a className="text-2xl text-light nice-trans hover:text-blue-700"
                 data-tooltip-id={`entryViewCount${entry.Id}`}
                 data-tooltip-place="top"
