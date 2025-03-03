@@ -1,9 +1,11 @@
 import * as bcrypt from 'bcryptjs'; 
 import AccountDao from '../dao/accountDao';
 import { Account } from '@prisma/client';
-import { signToken } from './token';
+import jwt from 'jsonwebtoken'; const { verify } = jwt;
+import { signToken, SECRET } from './token';
 import { Response } from 'express';
 import { AccountError } from './errors';
+import { Mailer, transporter } from './mailing';
 
 function throwIfExists(account: Account | null, field: string){
     if (account)
@@ -35,12 +37,49 @@ export async function login(res: Response, email: string | null, username: strin
 
     else (username)
         account = await accDao.getByUsername(username);
+    
+    if (!account)
+        throw new AccountError("Account doesn't exist");
+
+    if (!account.IsActive)
+        throw new AccountError("Account hasn't been activated yet, please check your inbox");
 
     // Signs a users token with an account if they sent the correct credentials
-    if (account !== null && await verifyPassword(passsword, account.Password))
+    if (await verifyPassword(passsword, account.Password))
         signToken(res, account);
     else
-        throw new AccountError("Account doesn't exist");
+        throw new AccountError("Credentials incorrect");
+}
+
+export async function sendActivateEmail(newAcc: Account){
+    try{
+        const mailer = new Mailer(transporter);
+
+        const token = signToken(null, newAcc);
+
+        mailer.send({
+            from: process.env.MAIL_USER as string,
+            to: newAcc.Email,
+            subject: "Activate Account",
+            text: `Please activate your account ${process.env.CLIENT_URL}/activate?token=${token}`,
+        });
+    }catch(err: any){
+        console.error(`Couldn't send activation email ${err.message}`);
+        throw new AccountError(err.message);
+    }
+}
+
+export async function activate(token: string){
+    try{
+        const decodedToken: jwt.JwtPayload = await verify(token, SECRET) as jwt.JwtPayload;
+        const account: Account = decodedToken.account;
+
+        const accDao: AccountDao = new AccountDao();
+        await accDao.update({ IsActive: true}, {Id: account.Id});
+    }catch(err: any){
+        console.error("Couldn't activate account");
+        throw new AccountError(`Couldn't activate account, token most likely expired ${err.message}`);
+    }
 }
 
 export async function register(email: string | null, username: string | null, password: string | null){
@@ -66,6 +105,9 @@ export async function register(email: string | null, username: string | null, pa
             Email: email,
             Password: hashedPass
         });
+
+        const newAcc: Account = await accDao.getByUsername(username);
+        sendActivateEmail(newAcc);
     }catch(err: any){
         console.error(`Error registering account: ${err.message}`);
         throw err;

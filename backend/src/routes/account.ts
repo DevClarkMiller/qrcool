@@ -1,6 +1,6 @@
 import express, { Router, Request, Response } from "express";
 import cookieJwtAuth from "../middleware/cookieJwtAuth";
-import { accountLogin, auth, create, count } from "../controllers/account";
+import { accountLogin, auth, create, count, accountActivate } from "../controllers/account";
 
 const accountRouter: Router = express.Router();
 
@@ -14,6 +14,9 @@ accountRouter.route('/count')
 
 accountRouter.route('/create')
     .post(create);
+
+accountRouter.route('/activate')
+    .post(accountActivate);
 
 accountRouter.route('/logout')
     .get(cookieJwtAuth, (req: Request, res: Response) =>{

@@ -22,13 +22,11 @@ export default async function cookieJwtAuth(req: Request, res: Response, next: N
             res.cookie("token", newToken, {
                 httpOnly: true, //Prevents browser javascript from seeing the cookies
             });
-            console.log('Users token has been refreshed!');
         }
         
         req.account = account;
         next();
     }catch(err: any){
-        console.error("User token expired or doesn't exist");
         res.clearCookie("token");
         res.status(403).send("User token expired or doesn't exist");
     }

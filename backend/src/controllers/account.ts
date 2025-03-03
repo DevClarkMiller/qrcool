@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Account } from "@prisma/client";
-import { login, register } from '../infrastructure/accountValidation';
+import { login, register, activate } from '../infrastructure/accountValidation';
 import AccountDao from "../dao/accountDao";
 import { handleErr } from '../infrastructure/errors';
 
@@ -18,6 +18,15 @@ export async function accountLogin(req: Request, res: Response){
 
     }catch(err){
         res.status(404).send('Error: Some fields may be entered incorrectly');
+    }
+}
+
+export async function accountActivate(req: Request, res: Response){
+    try{
+        const token: string = req.params.token as string;
+        await activate(token);
+    }catch(err){
+        handleErr(res, err);
     }
 }
 

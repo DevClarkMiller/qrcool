@@ -102,6 +102,10 @@ function useAccountController(appContext){
                     navigate('/');
                 });
             }
+
+            async activate(token){
+
+            }
         }
 
         return new AccountController(appContext);

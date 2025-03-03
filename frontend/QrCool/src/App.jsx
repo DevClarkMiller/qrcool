@@ -13,6 +13,7 @@ import Home from './pages/Home';
 import Entries from './pages/Entries';
 import Anonymous from './pages/Anonymous';
 import NotFound from './pages/NotFound';
+import ActivateAccount from './pages/ActivateAccount';
 
 // Context
 import AppProvider from './context/AppProvider';
@@ -34,6 +35,7 @@ function App() {
                 <Route path='/createAccount' element={ <CreateAccount /> } />
                 <Route path ='/anonymous/:contentType/:entryContentId' element={<Anonymous />} />
                 <Route path='/entries' element= {<Entries />}/>
+                <Route path='/activate' element= {<ActivateAccount />}/>
                 <Route path='*' element={<NotFound/>} />
               </Routes>
             </main>
