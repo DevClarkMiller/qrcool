@@ -18,4 +18,9 @@ describe('Create ExcelViewReport', () => {
         const evs: EntryView[] = await evDao.getByEntry(entry.Id);
         xlViewReport = new ExcelViewReport(evs);
     });
+
+    it("should report", async ()=>{
+        const buffer = await xlViewReport.report();
+        expect(buffer).toBeDefined();
+    });
 });
