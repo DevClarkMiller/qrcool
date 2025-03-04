@@ -16,7 +16,7 @@ const AccountProvider = ({children}) => {
 
     // Reducers
     const {} = useAccountState();
-    const { account, dispatchAccount, accountLoading, setAccountLoading, accountRef, accountController } = useAccountController(appContext);
+    const { account, dispatchAccount, accountLoading, accountController } = useAccountController(appContext);
 
     /*! Gets account if user isn't on the anonymous route */
     useEffect(() =>{ 

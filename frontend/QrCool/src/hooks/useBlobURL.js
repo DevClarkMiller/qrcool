@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 
+/* Hook: useBlobUrl
+*  Brief: Creates a url for a blob
+*/
 function useBlobUrl(data, type){
     const [blobURL, setBlobURL] = useState(null);
         

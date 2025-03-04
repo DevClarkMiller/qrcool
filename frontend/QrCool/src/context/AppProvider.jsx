@@ -18,6 +18,8 @@ const AppProvider = ({children}) => {
   const [showAddEntryModal, setShowAddEntryModal] = useState(false);
   const [showQrModal, setShowQrModal] = useState(false);
 
+  const [showEntryReportModal, setShowEntryReportModal] = useState(false);  
+
   const setHeaderStatus = (color, text, duration) =>{
     let lastColor = headerColor;
     let lastText = headerText;
@@ -115,7 +117,7 @@ const AppProvider = ({children}) => {
   }
             
   return(
-      <AppContext.Provider value={{Request, handleErr, setHeaderStatus, headerColor, setHeaderColor, headerText, setHeaderText, showModal, setShowModal, showEntryContentModal, setShowEntryContentModal, entryContentModalType, setEntryContentModalType, showAddEntryModal, setShowAddEntryModal, showQrModal, setShowQrModal}}>
+      <AppContext.Provider value={{Request, handleErr, setHeaderStatus, headerColor, setHeaderColor, headerText, setHeaderText, showModal, setShowModal, showEntryContentModal, setShowEntryContentModal, entryContentModalType, setEntryContentModalType, showAddEntryModal, setShowAddEntryModal, showQrModal, setShowQrModal, showEntryReportModal, setShowEntryReportModal}}>
           {children}
       </AppContext.Provider>
   );

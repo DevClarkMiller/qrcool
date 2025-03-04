@@ -1,13 +1,16 @@
 import { useEffect, useContext, useMemo } from "react"
 
 // Components
+import { Tooltip } from "react-tooltip";
+
+// Modals
 import AddEntryModal from "../modals/AddEntryModal";
 import EntryContentModal from "../modals/EntryContentModal";
 import GenericModal from '../modals/GenericModal';
 import QRModal from "../modals/QRModal";
-import { Tooltip } from "react-tooltip";
+import EntryReportModal from "../modals/EntryReportModal";
 
-// Custom hooks
+// Hooks
 import useEntryViewCount from '../hooks/content/useEntryViewCount';
 
 // Icons
@@ -22,7 +25,7 @@ import { AccountContext } from "../context/AccountProvider";
 
 const Entry = ({entry}) =>{
     const { entryController, entryContentController, setQrValue } = useContext(ContentContext);
-    const { setShowQrModal} = useContext(AppContext);
+    const { setShowQrModal } = useContext(AppContext);
     const { account } = useContext(AccountContext);
     const onClickEnter = async () =>{ entryContentController.get(entry); }
     const onClickDelete = () => { entryController.delete(entry.Id); }
@@ -137,6 +140,7 @@ function EntryContent(){
 
 const Entries = () => {
     const {entries, entryController} = useContext(ContentContext);
+    const {showEntryReportModal, setShowEntryReportModal} = useContext(AppContext);
 
     useEffect(() =>{ 
         if (!entries)
@@ -153,6 +157,7 @@ const Entries = () => {
                 <EntryContent />
                 <AddEntryModal />
                 <QRModal />
+                <EntryReportModal show={showEntryReportModal} setShow={setShowEntryReportModal}/>
             </ul>
         </div>
     );
