@@ -1,13 +1,17 @@
-import React, { useMemo } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom';
+import React, { useMemo, useContext } from 'react'
+import { useLocation } from 'react-router-dom';
 
 // Components
 import FormButton from '../components/FormButton';
 import NotFound from './NotFound';
 
+// Context
+import {AccountContext} from '../context/AccountProvider';
+
 function ActivateAccount() {
     const location = useLocation();
-    const navigate = useNavigate();
+    const { accountController } = useContext(AccountContext);
+
 
     // Fetch token from params
     const token = useMemo(() =>{
@@ -15,8 +19,9 @@ function ActivateAccount() {
         return query.get('token');
     }, []);
 
-    function onSubmit(e){
+    async function onSubmit(e){
         e.preventDefault();
+        await accountController.activate(token);
     }
 
     return (

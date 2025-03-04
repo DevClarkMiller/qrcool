@@ -98,13 +98,16 @@ function useAccountController(appContext){
     
                 super.post('/account/create', loginData, response =>{
                     this.appContext.setHeaderStatus("text-green-500", response.data, 2500);
-                    this.login();
-                    navigate('/');
+                    // this.login();
+                    // navigate('/');
                 });
             }
 
             async activate(token){
-
+                super.post(`/account/activate/${token}`, null, response =>{
+                    this.appContext.setHeaderStatus("text-green-500", response.data, 2500);
+                    navigate('/login');
+                });
             }
         }
 

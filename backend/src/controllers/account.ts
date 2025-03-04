@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Account } from "@prisma/client";
-import { login, register, activate } from '../infrastructure/accountValidation';
+import { login, register, activate, sendActivateEmail } from '../infrastructure/accountValidation';
 import AccountDao from "../dao/accountDao";
-import { handleErr } from '../infrastructure/errors';
+import { AccountError, handleErr } from '../infrastructure/errors';
 
 export async function accountLogin(req: Request, res: Response){
     try{
@@ -16,8 +16,11 @@ export async function accountLogin(req: Request, res: Response){
         else
             res.send(`Logged in successfully as ${accVm.Username}`);
 
-    }catch(err){
-        res.status(404).send('Error: Some fields may be entered incorrectly');
+    }catch(err: any){
+        if (err instanceof AccountError)
+            res.status(400).send(err.message);
+        else
+           res.status(404).send('Error: Some fields may be entered incorrectly');
     }
 }
 
@@ -25,7 +28,8 @@ export async function accountActivate(req: Request, res: Response){
     try{
         const token: string = req.params.token as string;
         await activate(token);
-    }catch(err){
+        res.send("Account activated!");
+    }catch(err: any){
         handleErr(res, err);
     }
 }
@@ -35,7 +39,7 @@ export async function create(req: Request, res: Response){
         const accVm: any = await req.body; // Catches any account form
         await register(accVm?.Email, accVm?.Username, accVm?.Password);
 
-        res.send(`Account with the username ${accVm.Username} has been created`);
+        res.send(`Account with the username ${accVm.Username} has been created, please check email inbox`);
     }catch(err){
         handleErr(res, err);
     }

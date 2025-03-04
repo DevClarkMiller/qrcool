@@ -41,8 +41,11 @@ export async function login(res: Response, email: string | null, username: strin
     if (!account)
         throw new AccountError("Account doesn't exist");
 
-    if (!account.IsActive)
-        throw new AccountError("Account hasn't been activated yet, please check your inbox");
+    // Resends the activation email if the clients token expires and they need to resend it
+    if (!account.IsActive){
+        sendActivateEmail(account);
+        throw new AccountError("Account hasn't been activated yet, activation email resent");
+    }
 
     // Signs a users token with an account if they sent the correct credentials
     if (await verifyPassword(passsword, account.Password))

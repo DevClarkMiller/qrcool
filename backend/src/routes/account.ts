@@ -15,7 +15,7 @@ accountRouter.route('/count')
 accountRouter.route('/create')
     .post(create);
 
-accountRouter.route('/activate')
+accountRouter.route('/activate/:token')
     .post(accountActivate);
 
 accountRouter.route('/logout')
