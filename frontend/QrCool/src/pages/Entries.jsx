@@ -17,21 +17,21 @@ import useEntryViewCount from '../hooks/content/useEntryViewCount';
 import { FaTrash, FaPlusCircle, FaCheckCircle, FaEdit, FaQrcode, FaEye } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
 
-
 // Context
 import { ContentContext } from "../context/ContentProvider";
 import { AppContext } from "../context/AppProvider";
 import { AccountContext } from "../context/AccountProvider";
 
 const Entry = ({entry}) =>{
-    const { entryController, entryContentController, setQrValue } = useContext(ContentContext);
-    const { setShowQrModal } = useContext(AppContext);
+    const { entryController, entryContentController, setQrValue, setActiveEntry } = useContext(ContentContext);
+    const { setShowQrModal, setShowEntryReportModal } = useContext(AppContext);
     const { account } = useContext(AccountContext);
     const onClickEnter = async () =>{ entryContentController.get(entry); }
     const onClickDelete = () => { entryController.delete(entry.Id); }
 
     const onClickReport = () =>{
-        console.log("REPORTING");
+        setShowEntryReportModal(true);
+        setActiveEntry(entry);
     }
 
     const onClickQr = () =>{

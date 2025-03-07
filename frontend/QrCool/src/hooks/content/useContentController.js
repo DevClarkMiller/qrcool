@@ -13,22 +13,6 @@ function useContentController(appContext, entryContentRef){
                 this.appContext.setHeaderStatus("text-green-500", response.data, 2500);
                 })
             }
-    
-            // async getAnonymous(contentId, contentType){
-            //     switch(contentType){
-            //     case "Text":
-            //         super.get(`/content/anonymous/${contentId}`, response =>{
-            //         this.appContext.setHeaderStatus("text-green-500", "Found content", 2500);
-            //         setAnonymousData(response.data);
-            //         });
-            //         break;
-            //     default:
-            //         super.getBlob(`/content/anonymous/${contentId}`, response =>{
-            //         this.appContext.setHeaderStatus("text-green-500", "Found content", 2500);
-            //         setAnonymousData(response.data);
-            //         });
-            //     }
-            // }
         }
 
         return new ContentController(appContext);

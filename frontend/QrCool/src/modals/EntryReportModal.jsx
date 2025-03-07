@@ -2,37 +2,42 @@ import { useState, useContext } from "react";
 
 // Components
 import GenericModal from "./GenericModal";
-import LabeledInputField from '../components/LabeledInputField';
-import InputField from '../components/InputField';
-
 import { FormControlLabel, Radio, RadioGroup } from "@mui/material";
 
 // Context
+import { ContentContext } from '../context/ContentProvider';
 
 const EntryReportModal = ({show, setShow}) => {
-    const [currRadio, setCurrRadio] = useState(null);
+    const [currRadio, setCurrRadio] = useState("reportViewsToExcel");
 
-    function radChange(val){
-        console.log(val);
+    const { entryController, activeEntry } = useContext(ContentContext);
+
+    async function onSubmit(){
+        await entryController.getReport(currRadio, activeEntry?.Id);
     }
+
 
     return (
         <GenericModal
             btnText="Create Report"
             title="Reports"
-            show={true}
+            show={show}
             setShow={setShow}
+            onSubmit={onSubmit}
         >
             <RadioGroup
                 defaultValue="reportViewsToExcel"
+                aria-labelledby="report-radio-buttons-group-label"
+                name="report-radio-buttons-group"
+                value={currRadio}
+                onChange={e => setCurrRadio(e.target.value)}
             >
                 <FormControlLabel 
-                    className="text-regular !font-bold" 
+                    classes={{label: "!font-bold text-regular"}}
                     value="reportViewsToExcel" 
-                    control={<Radio onChange={e => radChange(e.target.value)} />} 
+                    control={<Radio />} 
                     label="Standard Excel"/>
             </RadioGroup>
-           {/* <ReportRad radChange={radChange} value="reportViewsToExcel">Standard Excel</ReportRad> */}
         </GenericModal>
     );
 }

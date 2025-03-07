@@ -33,7 +33,7 @@ const ContentProvider = ({children}) =>{
   const { contentController } = useContentController(context, entryContentRef)
 
   return(
-      <ContentContext.Provider value={{ entries, entryContent, entryContentRed, contentType, activeEntry, entryController, entryContentController, contentTypeController, contentController, entryContentRef, entryName, setEntryName, anonymousData, file, setFile, fileRef, qrValue, setQrValue}}>
+      <ContentContext.Provider value={{ setActiveEntry, entries, entryContent, entryContentRed, contentType, activeEntry, entryController, entryContentController, contentTypeController, contentController, entryContentRef, entryName, setEntryName, anonymousData, file, setFile, fileRef, qrValue, setQrValue}}>
           {children}
       </ContentContext.Provider>
   );
