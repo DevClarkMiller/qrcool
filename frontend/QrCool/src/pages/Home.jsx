@@ -6,6 +6,9 @@ import RoundedButton from "../components/RoundedButton";
 import FormButton from "../components/FormButton";
 import { ClipLoader } from "react-spinners";
 
+// Pages
+import Entries from "./Entries";
+
 // Custom hooks
 import useAccountCount from '../hooks/account/useAccountCount';
 import useQuote from "../hooks/useQuote";
@@ -16,7 +19,7 @@ import { AccountContext } from "../context/AccountProvider";
 
 const FAQS = [
     {q: "Why create this webapp?", a: "To provide a free service to anyone who needs to manage a qr code"},
-    {q: "Are there any limits to what I can do?", a: "Yes, you can only create 5 entries and file sizes are limited to 100 mbs since this is a free service"}
+    {q: "Are there any limits to what I can do?", a: "Yes, you can only create 5 entries and file sizes are limited to 25 mbs since this is a free service"}
 ];
 
 function FAQItem({q, a}){
@@ -86,16 +89,14 @@ function LoggedInView(){
     const emoji = useEmoji();
 
     return(
-        <div className="size-full col-flex-center justify-between">
-            <div className="flex items-center gap-2">
+        <div className="size-full col-flex-center justify-between gap-5">
+            <div className="flex items-center gap-2 text-center">
                 <span>{account?.Username && 
                     <h3 className="text-xl">Welcome, <span className="font-semibold">{account?.Username}{emoji}</span></h3>
                     }</span>
                 <div className="text-xl">{quote}</div>
             </div>
-            <div className="size-full col-flex-center justify-center gap-3">
-                <RoundedButton onClick={() => navigate('/entries')}>See Your Links</RoundedButton>
-            </div>
+            <Entries />
         </div>
     );
 }

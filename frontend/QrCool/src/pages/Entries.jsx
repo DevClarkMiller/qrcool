@@ -101,7 +101,7 @@ function EntryContentItem({item}){
 
     return(
         <li className="size-full flex items-center gap-3">
-            <div className={`text-center bg-regular rounded entryContentItem size-full rounded-m text-xl font-bold text-white`}>{item.Content.Name}</div>
+            <div className={`p-1 text-center bg-regular rounded entryContentItem size-full rounded-m text-xl font-bold text-white`}>{item.Content.Name}</div>
             <button type="button" onClick={onClickActive} className={`${item.IsActive ? "text-green-500" : "hover:text-blue-700"} text-2xl text-black nice-trans`}>
                 <FaCheckCircle />
             </button>

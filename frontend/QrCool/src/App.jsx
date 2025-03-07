@@ -5,6 +5,7 @@ import 'react-tooltip/dist/react-tooltip.css'
 
 // Components
 import Header from './components/Header';
+import Footer from './components/Footer';
 
 // Pages
 import Login from './pages/account/Login';
@@ -34,10 +35,10 @@ function App() {
                 <Route path='/login' element={ <Login /> } />
                 <Route path='/createAccount' element={ <CreateAccount /> } />
                 <Route path ='/anonymous/:contentType/:entryContentId' element={<Anonymous />} />
-                <Route path='/entries' element= {<Entries />}/>
                 <Route path='/activate' element= {<ActivateAccount />}/>
                 <Route path='*' element={<NotFound/>} />
               </Routes>
+              <Footer />
             </main>
           </div>
         </ContentProvider>
