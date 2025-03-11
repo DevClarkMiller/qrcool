@@ -2,7 +2,6 @@ import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 // Components
-import RoundedButton from "../components/RoundedButton";
 import FormButton from "../components/FormButton";
 import { ClipLoader } from "react-spinners";
 
@@ -75,6 +74,10 @@ function AnonymousView(){
     return(
         <div className="size-full col-flex-center gap-5 justify-between p-5 pb-12">
             <h2 className="font-semibold text-lg mt-10">Simplify Your World, One Scan at a Time...</h2>
+            <span>
+                <p>QRCool is a QRCode / Link management service, we allow you to dynamically change the content</p>
+                <p>of a link whenever you please as well as view analytics on those links</p>
+            </span>
             <StartToday />
             <FAQ />            
         </div>
@@ -82,7 +85,6 @@ function AnonymousView(){
 }
 
 function LoggedInView(){
-    const navigate = useNavigate();
     const {account} = useContext(AccountContext);
 
     const quote = useQuote();
@@ -106,9 +108,7 @@ const Home = () => {
 
     return (
         <div className="size-full col-flex-center justify-center gap-5">
-            {accountLoading ? <ClipLoader 
-                size={150}
-            /> :
+            {accountLoading ? <ClipLoader size={150} color="white"/> :
             account?.LoggedIn ? <LoggedInView /> : <AnonymousView />}            
         </div>
     );
