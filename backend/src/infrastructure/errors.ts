@@ -15,11 +15,13 @@ export class AccountError extends Error{
     }
 }
 
-export function handleErr(res: Response, err: RequestError | Error){
+export function handleErr(res: Response, err: AccountError | RequestError | Error, defaultMessage: string | null = null){
     if (err instanceof RequestError)
         res.status(err.status).send(err.message);
     else if(err instanceof AccountError)
         res.status(400).send("Error: " + err.message);
+    else if (defaultMessage)
+        res.status(400).send(`Error: ${defaultMessage}`);
     else
         res.status(500).send("Error: " + err.message);
 }

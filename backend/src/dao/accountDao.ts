@@ -1,4 +1,5 @@
 import Dao  from "./dao";
+import * as bcrypt from 'bcryptjs'; 
 import { db } from "../index";
 import { Account } from "@prisma/client";
 
@@ -29,6 +30,16 @@ export default class AccountDao extends Dao{
         }catch(err: any){
             console.error(`Couldn't get count: ${err.message}`);
             return 0;
+        }
+    }
+
+    public async resetPassword(account: Account, newPassword: string): Promise<any>{
+        try{
+            const hashedPass = await bcrypt.hash(newPassword, 5);
+            await db.account.update({where: {Id: account.Id}, data: {Password: hashedPass}});
+        }catch(err: any){
+            console.error(err);
+            throw err;   
         }
     }
 }

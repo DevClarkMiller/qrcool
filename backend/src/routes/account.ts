@@ -1,12 +1,15 @@
 import express, { Router, Request, Response } from "express";
 import cookieJwtAuth from "../middleware/cookieJwtAuth";
-import { accountLogin, auth, create, count, accountActivate } from "../controllers/account";
+import { accountLogin, auth, create, count, accountActivate, resetPassword } from "../controllers/account";
 
 const accountRouter: Router = express.Router();
 
 accountRouter.route('/login')
     .get(cookieJwtAuth, auth)
     .post(accountLogin);
+
+accountRouter.route('/settings')
+    .put(cookieJwtAuth, resetPassword);
 
 // Returns a count of registered accounts
 accountRouter.route('/count') 

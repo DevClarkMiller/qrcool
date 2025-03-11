@@ -20,7 +20,7 @@ const Header = () => {
             <h1 className={`flex-grow nice-trans font-bold text-2xl text-center ${headerColor}`}>{headerText}</h1>
              
             {account?.LoggedIn && <div className="username font-semibold">{account?.Username}</div>}
-            {account?.LoggedIn && <Link to="/settings" className="text-3xl nice-trans hover:text-blue-500">
+            {account?.LoggedIn && <Link to="/settings/account" className="text-3xl nice-trans hover:text-blue-500">
                 <IoIosSettings />    
             </Link>}
             {account?.LoggedIn && <button onClick={accountController.logout} className="text-3xl nice-trans hover:text-blue-500"><IoLogOut /></button> }

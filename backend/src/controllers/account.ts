@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Account } from "@prisma/client";
 import { login, register, activate, sendActivateEmail } from '../infrastructure/accountValidation';
 import AccountDao from "../dao/accountDao";
-import { AccountError, handleErr } from '../infrastructure/errors';
+import { AccountError, handleErr, RequestError } from '../infrastructure/errors';
 
 export async function accountLogin(req: Request, res: Response){
     try{
@@ -16,7 +16,7 @@ export async function accountLogin(req: Request, res: Response){
         else
             res.send(`Logged in successfully as ${accVm.Username}`);
 
-    }catch(err: any){
+    }catch(err: any | AccountError){
         if (err instanceof AccountError)
             res.status(400).send(err.message);
         else
@@ -29,7 +29,7 @@ export async function accountActivate(req: Request, res: Response){
         const token: string = req.params.token as string;
         await activate(token);
         res.send("Account activated!");
-    }catch(err: any){
+    }catch(err: any | RequestError | AccountError){
         handleErr(res, err);
     }
 }
@@ -64,4 +64,15 @@ export async function count(req: Request, res: Response){
     const accDao: AccountDao = new AccountDao();
     const accountCount: number = await accDao.count();
     res.send(accountCount.toString());
+}
+
+export async function resetPassword(req: Request, res: Response){
+    try{
+        const newPassword: string = req.params.newPassword as string;
+        const accDao: AccountDao = new AccountDao();
+        await accDao.resetPassword(req.account, newPassword);
+        res.send("Successfully changed password");
+    }catch(err: any | RequestError){
+        handleErr(res, err, "Unknown error while changing password");
+    }    
 }
