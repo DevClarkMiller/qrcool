@@ -3,7 +3,7 @@ import api from "../api";
 
 export const AppContext = createContext();
 
-export const VALIDATED_ROUTES = ["entries", "login", "createAccount"];
+export const VALIDATED_ROUTES = ["login", "createAccount", "settings"];
 const AppProvider = ({children}) => {
   // State
   const [headerColor, setHeaderColor] = useState('text-light');
@@ -19,7 +19,7 @@ const AppProvider = ({children}) => {
   const [showQrModal, setShowQrModal] = useState(false);
 
   const [showEntryReportModal, setShowEntryReportModal] = useState(false);  
-
+  
   const setHeaderStatus = (color, text, duration) =>{
     let lastColor = headerColor;
     let lastText = headerText;

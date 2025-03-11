@@ -11,10 +11,10 @@ import Footer from './components/Footer';
 import Login from './pages/account/Login';
 import CreateAccount from './pages/account/CreateAccount';
 import Home from './pages/Home';
-import Entries from './pages/Entries';
 import Anonymous from './pages/Anonymous';
 import NotFound from './pages/NotFound';
 import ActivateAccount from './pages/ActivateAccount';
+import Settings from './pages/settings/Settings';
 
 // Context
 import AppProvider from './context/AppProvider';
@@ -36,6 +36,7 @@ function App() {
                 <Route path='/createAccount' element={ <CreateAccount /> } />
                 <Route path ='/anonymous/:contentType/:entryContentId' element={<Anonymous />} />
                 <Route path='/activate' element= {<ActivateAccount />}/>
+                <Route path='/settings/*' element ={<Settings />} />
                 <Route path='*' element={<NotFound/>} />
               </Routes>
               <Footer />

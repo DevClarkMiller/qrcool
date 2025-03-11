@@ -1,6 +1,6 @@
 import React from 'react'
 
-const InputField = ({ name, value, onChange, className, placeHolder, type = "text", required = false, ref = null }) =>{
+const InputField = ({ name, value, onChange, className, placeHolder, type = "text", required = false, ref = null, readOnly }) =>{
     return (
         <input 
             ref={ref}
@@ -11,6 +11,7 @@ const InputField = ({ name, value, onChange, className, placeHolder, type = "tex
             type={type}
             name={name}
             required={required}
+            readOnly={readOnly}
         />
     );
 };
