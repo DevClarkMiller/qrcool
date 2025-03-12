@@ -3,7 +3,6 @@ import { useState, useContext } from "react"
 // Components
 import LabeledInputField from '../../components/LabeledInputField';
 import InputField from '../../components/InputField';
-import FormButton from '../../components/FormButton';
 
 // Context
 import { AccountContext } from "../../context/AccountProvider"
@@ -38,6 +37,7 @@ function ResetPassword() {
                     type="password"
                 />}
             >New Password</LabeledInputField>
+            <button onClick={() => setShowConfirmation(true)} type='button' className='nice-trans bg-red-500 hover:bg-red-700 p-2 rounded-xl font-bold'>Change Password</button>
         </form>
     );
 }

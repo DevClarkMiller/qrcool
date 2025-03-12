@@ -9,7 +9,8 @@ const GenericModal = ({
     maxHeight='max-h-72', 
     centerTitle = false,
     titleColor = 'text-light',
-    hideScroll = false
+    hideScroll = false,
+    hideFooter = false
 }) => {
     // Hides modal
     function onModalClose(){
@@ -44,9 +45,9 @@ const GenericModal = ({
                 </ul>
 
                 {/* <!-- Modal footer --> */}
-                <div className="px-4 py-2 border-t border-t-gray-500 flex justify-center items-center space-x-4">
+                {!hideFooter && <div className={`px-4 py-2 flex justify-center items-center space-x-4 ${children ? "border-t border-t-gray-500" : ""}`}>
                     <button className="bg-regular text-light px-4 py-2 rounded-md hover:bg-blue-700 transition" type="submit">{btnText}</button>
-                </div>
+                </div>}
             </form>
         </div>
     );

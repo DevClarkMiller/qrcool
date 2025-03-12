@@ -2,6 +2,7 @@ import Dao  from "./dao";
 import * as bcrypt from 'bcryptjs'; 
 import { db } from "../index";
 import { Account } from "@prisma/client";
+import { verifyPassword } from "src/infrastructure/accountValidation";
 
 export default class AccountDao extends Dao{
     public constructor(){ super(db.account); }
@@ -40,6 +41,15 @@ export default class AccountDao extends Dao{
         }catch(err: any){
             console.error(err);
             throw err;   
+        }
+    }
+
+    public async validatePassword(account: Account, password: string): Promise<boolean>{
+        try{
+            await verifyPassword(password, account.Password);
+            return true;
+        }catch(err: any){
+            return false;
         }
     }
 }

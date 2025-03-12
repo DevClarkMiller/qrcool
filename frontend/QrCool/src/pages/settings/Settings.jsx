@@ -10,7 +10,7 @@ import { AccountContext } from '../../context/AccountProvider';
 
 function Settings() {
     return (
-        <div className='size-full col-flex-center'>
+        <div className='size-full col-flex-center justify-center'>
             <Routes>
                 <Route path='/account/*' element={<AccountSettings />} />
                 <Route path='/account/resetPassword' element={<ResetPassword />} />

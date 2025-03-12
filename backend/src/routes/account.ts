@@ -8,8 +8,11 @@ accountRouter.route('/login')
     .get(cookieJwtAuth, auth)
     .post(accountLogin);
 
-accountRouter.route('/settings')
-    .put(cookieJwtAuth, resetPassword);
+// accountRouter.route('/settings')
+//     .put(cookieJwtAuth, resetPassword);
+
+accountRouter.route('/resetPassword')
+    .put(resetPassword);
 
 // Returns a count of registered accounts
 accountRouter.route('/count') 

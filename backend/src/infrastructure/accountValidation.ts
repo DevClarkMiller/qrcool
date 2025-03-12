@@ -12,7 +12,7 @@ function throwIfExists(account: Account | null, field: string){
         throw new AccountError(`Account with that ${field} already exists`);
 }
 
-async function verifyPassword (pass: string, hashedPass: string): Promise<boolean>{
+export async function verifyPassword (pass: string, hashedPass: string): Promise<boolean>{
     try{
         const match = await bcrypt.compare(pass, hashedPass);
         return match;

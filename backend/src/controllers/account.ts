@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Account } from "@prisma/client";
-import { login, register, activate, sendActivateEmail } from '../infrastructure/accountValidation';
+import { login, register, activate, verifyPassword } from '../infrastructure/accountValidation';
 import AccountDao from "../dao/accountDao";
 import { AccountError, handleErr, RequestError } from '../infrastructure/errors';
 
@@ -68,8 +68,23 @@ export async function count(req: Request, res: Response){
 
 export async function resetPassword(req: Request, res: Response){
     try{
+        const email: string = req.params.email as string;
+        const username: string = req.params.username as string;
+        const oldPassword: string = req.params.oldPassword as string;
         const newPassword: string = req.params.newPassword as string;
+
         const accDao: AccountDao = new AccountDao();
+        let account: Account;
+        if (email)
+            account = await accDao.getByEmail(email);
+        else if (username)
+            account = await accDao.getByUsername(username);
+
+        const passValid = await accDao.validatePassword(account, oldPassword);
+
+        if (!passValid)
+            throw new RequestError(403, "Incorrect password");
+
         await accDao.resetPassword(req.account, newPassword);
         res.send("Successfully changed password");
     }catch(err: any | RequestError){
