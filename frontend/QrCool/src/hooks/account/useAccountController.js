@@ -109,6 +109,18 @@ function useAccountController(appContext){
                     navigate('/login');
                 });
             }
+
+            async resetPassword(email, oldPassword, newPassword){
+                const body = {
+                    email: email,
+                    oldPassword: oldPassword,
+                    newPassword: newPassword
+                };
+
+                super.set('/account/resetPassword', body, response =>{
+                    this.appContext.setHeaderStatus("text-green-500", response.data, 2500);       
+                });
+            }
         }
 
         return new AccountController(appContext);

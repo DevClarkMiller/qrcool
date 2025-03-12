@@ -46,8 +46,7 @@ export default class AccountDao extends Dao{
 
     public async validatePassword(account: Account, password: string): Promise<boolean>{
         try{
-            await verifyPassword(password, account.Password);
-            return true;
+            return await verifyPassword(password, account.Password);
         }catch(err: any){
             return false;
         }

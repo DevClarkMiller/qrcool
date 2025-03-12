@@ -19,8 +19,6 @@ const AccountProvider = ({children}) => {
     /*! Gets account if user isn't on the anonymous route */
     useEffect(() =>{ 
         const splPathName = location.pathname.split('/');
-        console.log(splPathName.some((nm) => VALIDATED_ROUTES.includes(nm)));
-        // console.log(location.pathname === '/' || splPathName.some((nm) => VALIDATED_ROUTES.includes(nm)));
         if (location.pathname === '/' || splPathName.some((nm) => VALIDATED_ROUTES.includes(nm)))
             accountController.get(); 
         else

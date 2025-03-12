@@ -3,7 +3,7 @@ import api from "../api";
 
 export const AppContext = createContext();
 
-export const VALIDATED_ROUTES = ["login", "createAccount", "settings"];
+export const VALIDATED_ROUTES = ["login", "createAccount"];
 const AppProvider = ({children}) => {
   // State
   const [headerColor, setHeaderColor] = useState('text-light');

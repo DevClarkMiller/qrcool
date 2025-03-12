@@ -71,20 +71,29 @@ const Entry = ({entry}) =>{
     );
 };
 
-const AddEntry = () =>{
+const AddEntry = ({hasEntries}) =>{
     const {setShowAddEntryModal} = useContext(AppContext);
+
 
     function onClick(){
         setShowAddEntryModal(true);
     }
 
     return(
-        <li className="w-full flex items-center gap-3 border-b-2 pb-2">
-            <div className="text-left flex-grow entry text-3xl font-bold">Add New Entry</div>
-            <button onClick={onClick} className="text-2xl text-light nice-trans hover:text-blue-700">
-                <FaPlusCircle />
-            </button>
-        </li>
+        <>
+            {hasEntries ? 
+                <li className="w-full flex items-center gap-3 border-b-2 pb-2">
+                    <div className="text-left flex-grow entry text-3xl font-bold">Add New Entry</div>
+                    <button onClick={onClick} className="text-2xl text-light nice-trans hover:text-blue-700">
+                        <FaPlusCircle />
+                    </button>
+                </li> : 
+                <button onClick={onClick} className="nice-trans hover:text-blue-500 text-2xl flex items-center gap-3">
+                    <span>Add Your First Entry</span> 
+                    <FaPlusCircle />
+                </button>
+            }
+        </>
     );
 }
 
@@ -112,11 +121,9 @@ function EntryContentItem({item}){
     );
 }
 
-function EntryContent(){
+function EntryContent({hasEntries}){
     const {showModal, setShowModal, setShowEntryContentModal, setEntryContentModalType, entries} = useContext(AppContext);
     const { entryContent } = useContext(ContentContext);
-
-    const hasEntries = useMemo(() => entries && entries?.length > 0, [entries]);
 
     const onOpenAdd = () =>{
         setShowEntryContentModal(true);
@@ -142,6 +149,8 @@ const Entries = () => {
     const {entries, entryController} = useContext(ContentContext);
     const {showEntryReportModal, setShowEntryReportModal} = useContext(AppContext);
 
+    const hasEntries = useMemo(() => entries && entries?.length > 0, [entries]);
+
     useEffect(() =>{ 
         if (!entries)
             entryController.get(); 
@@ -151,10 +160,10 @@ const Entries = () => {
         <div className="size-full col-flex-center justify-between pt-12 px-5">
             <h3 className="mb-5 text-3xl font-bold">Your entries</h3>
             <ul className="flex-grow nice-trans w-full lg:w-1/2 col-flex-center justify-center gap-3">
-                <AddEntry />
+                <AddEntry hasEntries={hasEntries} />
                 { entries?.map((entry) =><Entry key={entry?.Name} entry={entry} />)}
                 <EntryContentModal />
-                <EntryContent />
+                <EntryContent hasEntries={hasEntries}/>
                 <AddEntryModal />
                 <QRModal />
                 <EntryReportModal show={showEntryReportModal} setShow={setShowEntryReportModal}/>

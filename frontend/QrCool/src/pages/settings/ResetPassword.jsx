@@ -1,4 +1,4 @@
-import { useState, useContext } from "react"
+import { useState, useContext, useEffect } from "react"
 
 // Components
 import LabeledInputField from '../../components/LabeledInputField';
@@ -8,17 +8,28 @@ import InputField from '../../components/InputField';
 import { AccountContext } from "../../context/AccountProvider"
 
 function ResetPassword() {
-    const {account} = useContext(AccountContext);
+    const { account, accountController } = useContext(AccountContext);
 
+    const [email, setEmail] = useState(account?.Email);
     const [password, setPassword] = useState("");    
     const [newPassword, setNewPassword] = useState("");
 
     function onSubmit(e){
         e.preventDefault();
+        accountController.resetPassword(email, password, newPassword);
     }
 
     return (
         <form onSubmit={onSubmit} className="h-full w-2/3 lg:w-1/2 col-flex-center gap-3 justify-center">
+            {!account?.Email && <LabeledInputField
+                inputField={<InputField 
+                    name='Email'
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    required
+                    type="email"
+                />}
+            >Email</LabeledInputField>}
             <LabeledInputField
                 inputField={<InputField 
                     name='OldPassword'
@@ -37,7 +48,7 @@ function ResetPassword() {
                     type="password"
                 />}
             >New Password</LabeledInputField>
-            <button onClick={() => setShowConfirmation(true)} type='button' className='nice-trans bg-red-500 hover:bg-red-700 p-2 rounded-xl font-bold'>Change Password</button>
+            <button type='form' className='nice-trans bg-red-500 hover:bg-red-700 p-2 rounded-xl font-bold'>Change Password</button>
         </form>
     );
 }

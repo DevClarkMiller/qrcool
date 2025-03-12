@@ -127,7 +127,8 @@ export default class FileManager{
         try{
             const stat = await this.client.statObject(bucketName, objectName);
             return stat.metaData['content-type'];
-        }catch(err){
+        }catch(err: any){
+            console.error(err);
             throw err;
         }
     }

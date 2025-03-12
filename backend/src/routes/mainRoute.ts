@@ -71,6 +71,7 @@ mainRouter.get('/:username/:entryName', async (req: Request, res: Response) =>{
         }
 
         const content: Content = await contDao.getById(entryContent.ContentId);
+
         await returnByContentType(res, entryContent, content, entry.Id);
     }catch(err: any){
         console.error(err.message);

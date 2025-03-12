@@ -68,24 +68,32 @@ export async function count(req: Request, res: Response){
 
 export async function resetPassword(req: Request, res: Response){
     try{
-        const email: string = req.params.email as string;
-        const username: string = req.params.username as string;
-        const oldPassword: string = req.params.oldPassword as string;
-        const newPassword: string = req.params.newPassword as string;
+        const email: string = req.body.email as string;
+        const oldPassword: string = req.body.oldPassword as string;
+        const newPassword: string = req.body.newPassword as string;
 
         const accDao: AccountDao = new AccountDao();
         let account: Account;
+
+
         if (email)
             account = await accDao.getByEmail(email);
-        else if (username)
-            account = await accDao.getByUsername(username);
+
+        if (!account)
+            throw new RequestError(404, "Account not found");
+
+        if (!oldPassword)
+            throw new RequestError(400, "Old password not provided");
+
+        if (!newPassword)
+            throw new RequestError(400, "New password not provided");
 
         const passValid = await accDao.validatePassword(account, oldPassword);
 
         if (!passValid)
             throw new RequestError(403, "Incorrect password");
 
-        await accDao.resetPassword(req.account, newPassword);
+        await accDao.resetPassword(account, newPassword);
         res.send("Successfully changed password");
     }catch(err: any | RequestError){
         handleErr(res, err, "Unknown error while changing password");

@@ -175,7 +175,7 @@ export async function getAnonymous(req: Request, res: Response){
         const ecDao: EntryContentDao = new EntryContentDao();
         const conDao: ContentDao = new ContentDao();
         const contTypeDao: ContentTypeDao = new ContentTypeDao();
-
+        
         const entryContent: EntryContent = await ecDao.getById(entryContentId);
 
         const content: Content = await conDao.getById(entryContent.ContentId);
