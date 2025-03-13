@@ -95,7 +95,20 @@ export async function resetPassword(req: Request, res: Response){
 
         await accDao.resetPassword(account, newPassword);
         res.send("Successfully changed password");
-    }catch(err: any | RequestError){
+    }catch(err: any | RequestError | AccountError){
         handleErr(res, err, "Unknown error while changing password");
     }    
+}
+
+export async function deleteAccount(req: Request, res: Response){
+    try{
+        const accDao = new AccountDao();
+        await accDao.delete(req.account.Id);
+
+        // Clear their login token
+        res.clearCookie('token', { httpOnly: true, secure: true, sameSite: 'strict' });
+        res.send("Successfully deleted your account");
+    }catch(err: any | RequestError){
+        handleErr(res, err, "Unknown error while changing password");
+    } 
 }

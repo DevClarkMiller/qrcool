@@ -11,12 +11,12 @@ import GenericModal from '../../modals/GenericModal';
 import { AccountContext } from '../../context/AccountProvider';
 
 function AccountSettings() {
-    const {account} = useContext(AccountContext); 
+    const { account, accountController } = useContext(AccountContext); 
 
     const [showConfirmation, setShowConfirmation] = useState(false);
 
     function onDeleteAccount(){
-        console.log("Deleting account");
+        accountController.deleteAccount();
     }
 
     return (

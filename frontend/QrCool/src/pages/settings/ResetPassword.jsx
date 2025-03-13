@@ -22,6 +22,7 @@ function ResetPassword() {
     return (
         <form onSubmit={onSubmit} className="h-full w-2/3 lg:w-1/2 col-flex-center gap-3 justify-center">
             {!account?.Email && <LabeledInputField
+                className="justify-center"
                 inputField={<InputField 
                     name='Email'
                     value={email}
@@ -31,15 +32,17 @@ function ResetPassword() {
                 />}
             >Email</LabeledInputField>}
             <LabeledInputField
+                className="justify-center"
                 inputField={<InputField 
                     name='OldPassword'
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    required
+                    required        
                     type="password"
                 />}
             >Old Password</LabeledInputField>
             <LabeledInputField
+                className="justify-center"
                 inputField={<InputField 
                     name='NewPassword'
                     value={newPassword}

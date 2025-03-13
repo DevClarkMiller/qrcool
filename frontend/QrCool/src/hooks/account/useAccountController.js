@@ -121,6 +121,12 @@ function useAccountController(appContext){
                     this.appContext.setHeaderStatus("text-green-500", response.data, 2500);       
                 });
             }
+
+            async deleteAccount(){
+                super.delete('/account', response =>{
+                    this.appContext.setHeaderStatus("text-green-500", response.data, 2500);
+                });
+            }
         }
 
         return new AccountController(appContext);

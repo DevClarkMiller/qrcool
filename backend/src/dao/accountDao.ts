@@ -1,8 +1,9 @@
 import Dao  from "./dao";
 import * as bcrypt from 'bcryptjs'; 
 import { db } from "../index";
-import { Account } from "@prisma/client";
+import { Account, Entry } from "@prisma/client";
 import { verifyPassword } from "src/infrastructure/accountValidation";
+import EntryDao from "./entryDao";
 
 export default class AccountDao extends Dao{
     public constructor(){ super(db.account); }
@@ -49,6 +50,21 @@ export default class AccountDao extends Dao{
             return await verifyPassword(password, account.Password);
         }catch(err: any){
             return false;
+        }
+    }
+
+    // Delete all resources attatched to account as well
+    public async delete(id: number | null): Promise<any>{
+        try{
+            const account: Account = await this.getById(id);
+            const entDao = new EntryDao();
+            const entries: Entry[] = await entDao.getByAccount(id);
+            for (const entry of entries){
+                entDao.delete(entry.Id, account);
+            }
+            await super.delete(id);
+        }catch(err: any){
+            throw err;
         }
     }
 }

@@ -13,8 +13,6 @@ export default abstract class Dao{
 
             return await this.model.findFirstOrThrow({where: {Id: id}})
         }catch(err: any){
-            console.error(err.message);
-            // throw err;
             return null;
         }
     }
@@ -26,8 +24,6 @@ export default abstract class Dao{
 
             return await this.model.findFirstOrThrow({where: {Name: name}})
         }catch(err: any){
-            console.error(err.message);
-            // throw err;
             return null;
         }
     }
@@ -36,8 +32,6 @@ export default abstract class Dao{
         try{
             return await this.model.findMany();
         }catch(err: any){
-            console.error(err.message);
-            // throw err;
             return [];
         }
     }
@@ -47,8 +41,6 @@ export default abstract class Dao{
         try{
             return await this.model.findMany({where: where, select: select});
         }catch(err: any){
-            console.error(err.message);
-            // throw err;
             return [];
         }
     }
@@ -57,8 +49,6 @@ export default abstract class Dao{
         try{
             return await this.model.findFirstOrThrow({where: where});
         }catch(err: any){
-            console.error(err.message);
-            // throw err;
             return null;
         }
     }
@@ -67,7 +57,6 @@ export default abstract class Dao{
         try{
             return await this.model.update({data: data, where: where});
         }catch(err: any){
-            console.error(err.message);
             throw err;
         }
     }
@@ -76,7 +65,6 @@ export default abstract class Dao{
         try{
             return await this.model.updateMany({data: data, where: where});
         }catch(err: any){
-            console.error(err.message);
             throw err;
         }
     }
@@ -85,7 +73,6 @@ export default abstract class Dao{
         try{
             return await this.model.create({data: data});
         }catch(err: any){
-            console.error(err.message);
             throw err;
         }
     }
@@ -98,7 +85,6 @@ export default abstract class Dao{
             await this.model.delete({ where: { Id: id }});
         }catch(err: any){
             console.log("FAILED TO DELETE WITH ID: " + id);
-            console.error(err.message);
             throw err;
         }
     }
@@ -107,7 +93,6 @@ export default abstract class Dao{
         try{
             await this.model.deleteMany({ where: where});
         }catch(err: any){
-            console.error(err.message);
             throw err;
         }
     }
