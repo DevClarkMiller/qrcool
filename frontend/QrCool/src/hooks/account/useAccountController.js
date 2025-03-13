@@ -40,19 +40,19 @@ function useAccountController(appContext){
                 dispatchAccount({type: LOGIN_ACTIONS.LOGIN});
             }
     
-            get = async() =>{
+            get = async(redirect = true) =>{
                 setAccountLoading(true);
                 super.get('/account/login', response =>{
                     this.setField("Email", response.data.Email);
                     this.setField("Username", response.data.Username);
                     this.setField("Password", response.data.Password);
-                    this.login();
+                    if (redirect) this.login();
                     setAccountLoading(false);
                 }, err =>{
                     setAccountLoading(false);
-                    console.log(err);
-                    if (!location.pathname.includes("login") && !location.pathname.includes("createAccount") && location?.pathname != '/')
-                        navigate('/login');
+                    if (redirect) navigate('/login');
+                    
+                    // if (!location.pathname.includes("login") && !location.pathname.includes("createAccount") && location?.pathname != '/')
                 });
             }
     

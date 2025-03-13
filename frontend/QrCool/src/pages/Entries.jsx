@@ -122,8 +122,10 @@ function EntryContentItem({item}){
 }
 
 function EntryContent({hasEntries}){
-    const {showModal, setShowModal, setShowEntryContentModal, setEntryContentModalType, entries} = useContext(AppContext);
+    const { showModal, setShowModal, setShowEntryContentModal, setEntryContentModalType } = useContext(AppContext);
     const { entryContent } = useContext(ContentContext);
+
+    const hasEC = useMemo(() => entryContent?.length > 0, [entryContent]);
 
     const onOpenAdd = () =>{
         setShowEntryContentModal(true);
@@ -138,8 +140,9 @@ function EntryContent({hasEntries}){
             setShow={setShowModal}
             show={showModal}
             onSubmit={() => setShowModal(false)}
+            hideScroll={!hasEC}
         >   
-            <li className={`size-full ${hasEntries && "border-b-2 border-regular pb-2"}`}><button type="button" onClick={onOpenAdd} className={`bg-sky rounded entryContentItem size-full rounded-m text-xl font-bold nice-trans hover:bg-blue-400 text-white`}>Add</button></li>
+            <li className={`size-full ${hasEC ? "border-b-2 border-regular pb-2" : ""}`}><button type="button" onClick={onOpenAdd} className={`bg-sky rounded entryContentItem size-full rounded-m text-xl font-bold nice-trans hover:bg-blue-400 text-white`}>Add</button></li>
             { entryContent?.map ((item) => <EntryContentItem key={item?.Content.Name} item={item} setShowModal={setShowModal} />)}
         </GenericModal>
     );
