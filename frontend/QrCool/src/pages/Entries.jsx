@@ -104,8 +104,7 @@ const Entries = () => {
     const hasEntries = useMemo(() => entries && entries?.length > 0, [entries]);
 
     useEffect(() =>{ 
-        if (!entries)
-            entryController.get(); 
+        if (!entries) entryController.get(); 
     }, []);
 
     return (

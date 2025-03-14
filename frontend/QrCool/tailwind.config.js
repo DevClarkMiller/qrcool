@@ -12,6 +12,9 @@ export default {
           'regular' : '#433D8B',
           'light': '#C8ACD6',
           'sky': '#8FB1FF'
+        },
+        fontFamily: {
+          
         }
       },
     },
