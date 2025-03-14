@@ -22,7 +22,7 @@ const CreateAccount = ({onSubmit, isLogin}) => {
 
   return (
     <div className="size-full col-flex-center justify-center">
-        <form className="w-3/4 lg:w-1/3 gap-5 col-flex-center justify-between bg-medium rounded-xl p-10" onSubmit={onSubmit}>
+        <form className="w-11/12 lg:w-1/3 gap-5 col-flex-center justify-between bg-medium rounded-xl p-5" onSubmit={onSubmit}>
             <div className="fields col-flex-center size-full flex-grow gap-5">
                 <LabeledInputField
                     inputField={<InputField className="w-full" name="Email" onChange={accountController.changeField} value={account?.Email} placeHolder="personxyz@email.com" type="email" />}

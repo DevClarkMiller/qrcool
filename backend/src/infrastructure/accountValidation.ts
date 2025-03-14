@@ -28,7 +28,6 @@ export async function login(res: Response, email: string | null, username: strin
     const accDao = new AccountDao();
     let account: Account | null;
 
-
     if (email && username)
         account = await accDao.getByEmail(email);
 
