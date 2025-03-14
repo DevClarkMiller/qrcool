@@ -147,7 +147,6 @@ export default class EntryContentDao extends Dao{
             const fileStream: stream.PassThrough = fileManager.bufferToStream(file.data);
 
             const ecCount = await db.entryContent.count({where: { EntryId: entry.Id }});
-            console.log(ecCount, process.env.ENTRY_CONTENT_LIMIT);
                     
             if (ecCount >= parseInt(process.env.ENTRY_CONTENT_LIMIT as string))
                 throw new Error("EntryContent limit reach for Entry");
@@ -158,12 +157,12 @@ export default class EntryContentDao extends Dao{
             if (contentTypeId === null)
                 throw Error("ContentTypeId not provided");
 
-            if (!name)
-                name = file.name.split('.')[0];
+            if (!name) name = file.name.split('.')[0];
 
             const contDao = new ContentDao();
 
             const path = `${account.Username}/${entry.Name}/${file.name}`;
+            console.log(path);
 
             // First upload the file to minio, any errors will cause it to not commit to the db
             await fileManager.post(BUCKET_NAME, path, fileStream, file.size);
@@ -193,7 +192,6 @@ export default class EntryContentDao extends Dao{
             const contDao = new ContentDao();
 
             const ecCount = await db.entryContent.count({where: { EntryId: entryId }});
-            console.log(ecCount, process.env.ENTRY_CONTENT_LIMIT);
                     
             if (ecCount >= parseInt(process.env.ENTRY_CONTENT_LIMIT as string))
                 throw new Error("EntryContent limit reach for Entry");
