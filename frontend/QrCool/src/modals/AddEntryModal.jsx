@@ -27,6 +27,7 @@ const AddEntryModal = () => {
             setShow={setShowAddEntryModal}
             onSubmit={onSubmit}
             title="Add Entry"
+            hideScroll
         >
             <LabeledInputField
                 className="text-regular font-bold text-left"

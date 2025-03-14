@@ -1,126 +1,62 @@
-import { useContext, useEffect, useMemo, useState, useCallback, useRef } from "react";
+import { useContext, useMemo } from "react";
 
 // Components
-import Select from "react-select";
 import GenericModal from "./GenericModal";
 
-// Content Type Forms
-import { RedirectForm, TextForm, FileForm } from '../components/ContentTypeForms';
-
 // Context
-import { ContentContext } from "../context/ContentProvider";
 import { AppContext } from "../context/AppProvider";
+import { ContentContext } from "../context/ContentProvider";
 
-const EntryContentModal = () => {
-    const {showEntryContentModal, setShowEntryContentModal, setShowModal, entryContentModalType} = useContext(AppContext);
-    const {entryContentController, contentType, entryContentRed, activeEntry, entryContentRef} = useContext(ContentContext);
+// Icons
+import { FaTrash, FaCheckCircle } from "react-icons/fa";
 
-    // Memo
-    const contentTypeOptions = useMemo(() => (
-        contentType?.map(ct => ({
-            value: ct.Id,
-            label: ct.Name
-        }))
-    ), [contentType]);
+function EntryContentItem({item}){
+    const { entryContentController } = useContext(ContentContext);
 
-    const onClose = () =>{
-        setShowModal(true);
-        setShowEntryContentModal(false);
-        entryContentController.reset();
+    const onClickActive = () =>{ 
+        entryContentController.set(item);
     }
 
-    const defaultFormSubmit = e =>{
-        e.preventDefault();
-        onClose();
+    const onClickDelete = () => {
+        entryContentController.delete(item);
     }
-
-    // State
-    const [formType, setFormType] = useState(null);
-    const [formSubmit, setFormSubmit] = useState(() => defaultFormSubmit);
-    const [submitted, setSubmitted] = useState(false);
-
-    const [selectValue, setSelectValue] = useState(null);
-
-    useEffect(() =>{
-        if (submitted && entryContentRed){
-            formSubmit();
-            setSubmitted(false);
-        }
-    }, [submitted, entryContentRed, entryContentController, formSubmit]);
-
-    const onSubmit = e =>{
-        e.preventDefault();
-        setSubmitted(true);
-        setSelectValue(null);
-        setFormType(null);
-    }
-
-    const regularFormSubmit = useCallback(async () =>{
-        await entryContentController.post(activeEntry.Id);
-        onClose();
-    }, [entryContentController, activeEntry, onClose]);
-
-    const onFileSubmit = useCallback(async () =>{
-        await entryContentController.postFile(activeEntry?.Id)
-    }, [activeEntry]);
-    
-    const onSelect = useCallback((option) =>{
-        setSelectValue(option);
-        entryContentController.contentFieldSet("ContentTypeId", option.value);
-        // Set specific forms on the different cases
-        switch(option?.label){
-            case "Redirect":{
-                setFormType(<RedirectForm />);
-                setFormSubmit(() => regularFormSubmit);
-                break;
-            }
-            case "Text":{
-                setFormType(<TextForm />);
-                setFormSubmit(() => regularFormSubmit);
-                break;
-            }
-
-            // These cases need to upload a file, so they all just 
-            case "Image":
-            case "Video":
-            case "Audio":
-            case "HTML":
-            case "File": {
-                setFormType(<FileForm />);
-                setFormSubmit(() => onFileSubmit);
-                break;
-            }
-
-            default: {
-                setFormType(null);
-                setFormSubmit(() => defaultFormSubmit);
-            }
-        }
-    }, [entryContentController]);
 
     return(
-        <GenericModal
-            show={showEntryContentModal}
-            setShow={setShowEntryContentModal}
-            title={`${entryContentModalType} Entry Content`}
-            btnText={entryContentModalType}
-            onSubmit={onSubmit}
-            onClose={onClose}
-        >
-            <Select 
-                styles={{ 
-                    control: (styles) => ({ ...styles, zIndex: 1001}),
-                    menu: (styles) => ({ ...styles, zIndex: 1001}),
-                    menuPortal: (styles) => ({ ...styles, zIndex: 1001})
-                }}
-                className="w-full z-50" 
-                options={contentTypeOptions}
-                menuPortalTarget={document.body}
-                menuPosition="fixed"
-                onChange={onSelect}
-                value={selectValue}
-            />
-            <>{formType}</>
+        <li className="size-full flex items-center gap-3">
+            <div className={`p-1 text-center bg-regular rounded entryContentItem size-full rounded-m text-xl font-bold text-white`}>{item.Content.Name}</div>
+            <button type="button" onClick={onClickActive} className={`${item.IsActive ? "text-green-500" : "hover:text-blue-700"} text-2xl text-black nice-trans`}>
+                <FaCheckCircle />
+            </button>
+            <button type="button" onClick={onClickDelete} className="text-2xl text-black nice-trans hover:text-red-700">
+                <FaTrash />
+            </button>
+        </li>
+    );
+}
+
+function EntryContentModal(){
+    const { showModal, setShowModal, setShowEntryContentModal, setEntryContentModalType } = useContext(AppContext);
+    const { entryContent } = useContext(ContentContext);
+
+    const hasEC = useMemo(() => entryContent?.length > 0, [entryContent]);
+
+    const onOpenAdd = () =>{
+        setShowEntryContentModal(true);
+        setShowModal(false);
+        setEntryContentModalType('Add');
+    }
+
+    return(
+        <GenericModal 
+            btnText="Close (ESC)"
+            title="Manage Entry Content"
+            setShow={setShowModal}
+            show={showModal}
+            onSubmit={() => setShowModal(false)}
+            hideScroll={!hasEC}
+        >   
+            <li className={`size-full ${hasEC ? "border-b-2 border-regular pb-2" : ""}`}><button type="button" onClick={onOpenAdd} className={`bg-sky rounded entryContentItem size-full rounded-m text-xl font-bold nice-trans hover:bg-blue-400 text-white`}>Add</button></li>
+            { entryContent?.map ((item) => <EntryContentItem key={item?.Content.Name} item={item} setShowModal={setShowModal} />)}
         </GenericModal>
     );
 }
