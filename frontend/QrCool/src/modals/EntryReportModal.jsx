@@ -24,6 +24,7 @@ const EntryReportModal = ({show, setShow}) => {
             show={show}
             setShow={setShow}
             onSubmit={onSubmit}
+            centerTitle
         >
             <RadioGroup
                 defaultValue="reportViewsToExcel"

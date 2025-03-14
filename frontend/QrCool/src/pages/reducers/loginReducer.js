@@ -29,10 +29,7 @@ export const loginReducer = (state, action) =>{
             };
 
         case LOGIN_ACTIONS.LOGOUT:
-            return {
-                ...state,
-                LoggedIn: false
-            };
+            return INITIAL_STATE;
         default:
             return state;
     }

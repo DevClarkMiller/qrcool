@@ -93,10 +93,10 @@ function LoggedInView(){
     return(
         <div className="size-full col-flex-center justify-between gap-5">
             <div className="flex items-center gap-2 text-center">
-                <span>{account?.Username && 
+                <div className="w-full text-center col-flex-center justify-center">
                     <h3 className="text-xl">Welcome, <span className="font-semibold">{account?.Username}{emoji}</span></h3>
-                    }</span>
-                <div className="text-xl">{quote}</div>
+                    <div className="text-xl">{quote}</div>
+                </div>
             </div>
             <Entries />
         </div>

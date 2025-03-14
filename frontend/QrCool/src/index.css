@@ -34,4 +34,12 @@ body{
   .text-slider-visible{
     @apply blur-none opacity-100 transform -translate-x-20;
   }
+
+  .icon{
+    @apply text-3xl lg:text-2xl;
+  }
+
+  .icon-blue-hover{
+    @apply nice-trans hover:text-blue-500;
+  }
 }

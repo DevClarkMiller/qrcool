@@ -45,14 +45,14 @@ const Entry = ({entry}) =>{
     return(
         <li className="w-full flex items-center gap-3">
             <div className="entry text-left flex-grow text-3xl font-semibold overflow-hidden overflow-ellipsis whitespace-nowrap">{entry?.Name}</div>
-            <button onClick={onClickQr} className="text-2xl text-light nice-trans hover:text-blue-700">
+            <button onClick={onClickQr} className={`icon text-light nice-trans hover:text-blue-700`}>
                 <FaQrcode />
             </button>
             {
-            <button onClick={onClickReport} className="text-2xl text-light nice-trans hover:text-blue-700">
+            <button onClick={onClickReport} className={`icon text-light nice-trans hover:text-blue-700`}>
                 <TbReportAnalytics />
             </button>}
-            <a className="text-2xl text-light nice-trans hover:text-blue-700"
+            <a className={`icon text-light nice-trans hover:text-blue-700`}
                 data-tooltip-id={`entryViewCount${entry.Id}`}
                 data-tooltip-place="top"
             >
@@ -61,10 +61,10 @@ const Entry = ({entry}) =>{
             <Tooltip id={`entryViewCount${entry.Id}`}>
                 {entryViewCount}
             </Tooltip>
-            <button onClick={onClickEnter} className="text-2xl text-light nice-trans hover:text-blue-700">
+            <button onClick={onClickEnter} className={`icon text-light nice-trans hover:text-blue-700`}>
                 <FaEdit />
             </button>
-            <button onClick={onClickDelete} className="text-2xl text-light nice-trans hover:text-red-700">
+            <button onClick={onClickDelete} className={`icon text-light nice-trans hover:text-red-700`}>
                 <FaTrash />
             </button>
         </li>
@@ -83,8 +83,8 @@ const AddEntry = ({hasEntries}) =>{
         <>
             {hasEntries ? 
                 <li className="w-full flex items-center gap-3 border-b-2 pb-2">
-                    <div className="text-left flex-grow entry text-3xl font-bold">Add New Entry</div>
-                    <button onClick={onClick} className="text-2xl text-light nice-trans hover:text-blue-700">
+                    <div className="entry text-left flex-grow text-3xl font-bold">Add New Entry</div>
+                    <button onClick={onClick} className={`icon text-light nice-trans hover:text-blue-700`}>
                         <FaPlusCircle />
                     </button>
                 </li> : 
