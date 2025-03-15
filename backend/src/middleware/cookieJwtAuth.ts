@@ -14,9 +14,10 @@ export default async function cookieJwtAuth(req: Request, res: Response, next: N
 
         const nowUNIX: number = Math.floor(new Date().getTime() / 1000);    //Get current time in unix format
         const timeLeft: number = decodedToken.exp as number - nowUNIX;
+        
 
         if(timeLeft <= 300){ //If users token has less than 5 minutes left, sign a new one
-            const newToken = sign({account: account}, SECRET, {expiresIn: "900s"});
+            const newToken = sign({account: account}, SECRET, {expiresIn: process.env.JWT_EXPIRATION as any});
             
             // Puts a token into the request header if a token was recieved in the query
             res.cookie("token", newToken, {
