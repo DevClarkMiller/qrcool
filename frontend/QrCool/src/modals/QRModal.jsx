@@ -22,11 +22,11 @@ function ColorController({color, setColor, label="", tooltip="tooltip"}){
     }
 
     return(
-        <button onClick={colorClick} data-tooltip-id={`color-${label}`}  type="button" className="flex items-center gap-2">
+        <button onClick={colorClick} data-tooltip-id={`color-${label}`}  type="button" className="flex items-center gap-2 relative">
             <label className="text-light font-bold text-xl cursor-pointer">{label}</label>
             <div style={{color: color}} className="text-3xl">
                 <IoIosColorPalette />
-                <input value={color} ref={colorRef} onChange={e => setColor(e.target.value)} type="color" className="hidden"/>
+                <input value={color} ref={colorRef} onChange={e => setColor(e.target.value)} type="color" className="absolute inset-0 w-full opacity-0"/>
                 </div>
             <Tooltip id={`color-${label}`}>
                 {tooltip}
