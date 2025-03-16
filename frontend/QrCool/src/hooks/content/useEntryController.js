@@ -3,7 +3,7 @@ import { useMemo, useState, useEffect } from "react";
 import Controller from "../../tools/controller";
 
 function useEntryController(appContext, entries, setEntries){
-  const [entriesLoading, setEntriesLoading] = useState(false);
+  const [entriesLoading, setEntriesLoading] = useState(true);
 
   const entryController = useMemo(() =>{
       class EntryController extends Controller{
@@ -59,10 +59,6 @@ function useEntryController(appContext, entries, setEntries){
 
       return new EntryController(appContext)
   }, [appContext, entries, setEntries]);
-
-    useEffect(() =>{
-      console.log(entriesLoading);
-  }, [entriesLoading]);
 
   return {entriesLoading, setEntriesLoading, entryController};
 }
