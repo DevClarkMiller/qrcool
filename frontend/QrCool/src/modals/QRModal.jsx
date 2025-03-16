@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useRef, useState } from "react"
 
 // Components
 import GenericModal from "./GenericModal";
@@ -22,23 +22,16 @@ function ColorController({color, setColor, label="", tooltip="tooltip"}){
     }
 
     return(
-        <div className="flex items-center gap-2">
-            <label className="text-light font-bold text-xl">{label}</label>
-            <a data-tooltip-id={`color-${label}`} className="flex items-center">
-                <button 
-                style={{color: color}}
-                type="button" 
-                onClick={colorClick} 
-                onTouch
-                className="text-3xl">
-                    <IoIosColorPalette />
-                    <input value={color} ref={colorRef} onChange={e => setColor(e.target.value)} type="color" className="opacity-0 w-0 h-0 absolute"/>
-                </button>
-            </a>
+        <button onClick={colorClick} data-tooltip-id={`color-${label}`}  type="button" className="flex items-center gap-2">
+            <label className="text-light font-bold text-xl cursor-pointer">{label}</label>
+            <div style={{color: color}} className="text-3xl">
+                <IoIosColorPalette />
+                <input value={color} ref={colorRef} onChange={e => setColor(e.target.value)} type="color" className="hidden"/>
+                </div>
             <Tooltip id={`color-${label}`}>
                 {tooltip}
             </Tooltip>
-        </div>
+        </button>
     );
 }
 
