@@ -162,7 +162,6 @@ export default class EntryContentDao extends Dao{
             const contDao = new ContentDao();
 
             const path = `${account.Username}/${entry.Name}/${file.name}`;
-            console.log(path);
 
             // First upload the file to minio, any errors will cause it to not commit to the db
             await fileManager.post(BUCKET_NAME, path, fileStream, file.size);

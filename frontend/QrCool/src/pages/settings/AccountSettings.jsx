@@ -38,6 +38,8 @@ function AccountSettings() {
                 </div>
             </GenericModal>
             <LabeledInputField
+                className="justify-center"
+                inputFieldClassName='w-fit'
                 inputField={<InputField 
                     name='Email'
                     value={account?.Email}
@@ -46,16 +48,19 @@ function AccountSettings() {
             >Email</LabeledInputField>
 
             <LabeledInputField
+                inputFieldClassName='w-fit'
+                className="justify-center"
                 inputField={<InputField 
+                    className="w-fit"
                     name='Username'
                     value={account?.Username}
                     readOnly
                 />}
             >Username</LabeledInputField>
-            <div className='w-full underline nice-trans hover:text-blue-500'>
-                <Link to='resetPassword'>Reset Password</Link>
+            <div className='flex items-center justify-center w-full gap-10 mt-10'>
+                <Link className='underline nice-trans hover:text-blue-500' to='resetPassword'>Reset Password</Link>
+                <button onClick={() => setShowConfirmation(true)} type='button' className='nice-trans bg-red-500 hover:bg-red-700 p-2 rounded-xl font-bold'>Delete Account</button>
             </div>
-            <button onClick={() => setShowConfirmation(true)} type='button' className='nice-trans bg-red-500 hover:bg-red-700 p-2 rounded-xl font-bold'>Delete Account</button>
         </ul>
     );
 }

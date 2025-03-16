@@ -22,7 +22,8 @@ function ResetPassword() {
     return (
         <form onSubmit={onSubmit} className="h-full w-2/3 lg:w-1/2 col-flex-center gap-3 justify-center">
             {!account?.Email && <LabeledInputField
-                className="justify-center"
+                className="justify-center w-2/3"
+                inputFieldClassName="w-fit"
                 inputField={<InputField 
                     name='Email'
                     value={email}
@@ -32,7 +33,8 @@ function ResetPassword() {
                 />}
             >Email</LabeledInputField>}
             <LabeledInputField
-                className="justify-center"
+                className="justify-center w-2/3"
+                inputFieldClassName="w-fit"
                 inputField={<InputField 
                     name='OldPassword'
                     value={password}
@@ -42,7 +44,8 @@ function ResetPassword() {
                 />}
             >Old Password</LabeledInputField>
             <LabeledInputField
-                className="justify-center"
+                className="justify-center w-2/3"
+                inputFieldClassName="w-fit"
                 inputField={<InputField 
                     name='NewPassword'
                     value={newPassword}
@@ -51,7 +54,7 @@ function ResetPassword() {
                     type="password"
                 />}
             >New Password</LabeledInputField>
-            <button type='form' className='nice-trans bg-red-500 hover:bg-red-700 p-2 rounded-xl font-bold'>Change Password</button>
+            <button type='form' className='mt-5 nice-trans bg-red-500 hover:bg-red-700 p-2 rounded-xl font-bold'>Change Password</button>
         </form>
     );
 }
