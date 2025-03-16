@@ -7,7 +7,7 @@ import { AccountError, handleErr, RequestError } from '../infrastructure/errors'
 export async function accountLogin(req: Request, res: Response){
     try{
         const accVm: any = req.body; // Catches any account form
-
+        res.clearCookie("token"); // Clear out any old tokens
         await login(res, accVm?.Email, accVm?.Username, accVm?.Password);
 
         if (accVm?.Username && accVm?.Password)

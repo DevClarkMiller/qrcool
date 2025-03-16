@@ -91,7 +91,7 @@ function LoggedInView(){
     const emoji = useEmoji();
 
     return(
-        <div className="size-full col-flex-center justify-between gap-5">
+        <div className="size-full col-flex-center justify-start gap-5">
             <div className="flex items-center gap-2 text-center">
                 <div className="w-full text-center col-flex-center justify-center">
                     <h3 className="text-xl">Welcome, <span className="font-semibold">{account?.Username}{emoji}</span></h3>

@@ -39,8 +39,8 @@ function App() {
                 <Route path='/settings/*' element ={<Settings />} />
                 <Route path='*' element={<NotFound/>} />
               </Routes>
-              <Footer />
             </main>
+            <Footer />
           </div>
         </ContentProvider>
       </AccountProvider>
