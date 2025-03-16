@@ -2,6 +2,7 @@ import { useEffect, useContext, useMemo } from "react"
 
 // Components
 import { Tooltip } from "react-tooltip";
+import { ClipLoader } from "react-spinners";
 
 // Modals
 import AddEntryModal from "../modals/AddEntryModal";
@@ -15,7 +16,7 @@ import EntryContentModal from "../modals/EntryContentModal";
 import useEntryViewCount from '../hooks/content/useEntryViewCount';
 
 // Icons
-import { FaTrash, FaPlusCircle, FaCheckCircle, FaEdit, FaQrcode, FaEye } from "react-icons/fa";
+import { FaTrash, FaPlusCircle, FaEdit, FaQrcode, FaEye } from "react-icons/fa";
 import { TbReportAnalytics } from "react-icons/tb";
 
 // Context
@@ -98,7 +99,7 @@ const AddEntry = ({hasEntries}) =>{
 }
 
 const Entries = () => {
-    const {entries, entryController} = useContext(ContentContext);
+    const {entries, entryController, entriesLoading} = useContext(ContentContext);
     const {showEntryReportModal, setShowEntryReportModal} = useContext(AppContext);
 
     const hasEntries = useMemo(() => entries && entries?.length > 0, [entries]);
@@ -107,19 +108,22 @@ const Entries = () => {
         if (!entries) entryController.get(); 
     }, []);
 
+    
+
     return (
         <div className="size-full col-flex-center justify-between pt-12 px-5">
             <h3 className="mb-5 text-3xl font-bold">Your entries</h3>
-            <ul className="flex-grow nice-trans w-full lg:w-1/2 col-flex-center justify-center gap-3">
+            {entriesLoading ? <ClipLoader size={150} color="white"/> :
+                <ul className="flex-grow nice-trans w-full lg:w-1/2 col-flex-center justify-center gap-3">
                 <AddEntry hasEntries={hasEntries} />
                 { entries?.map((entry) =><Entry key={entry?.Name} entry={entry} />)}
                 <AddEntryContentModal />
                 <EntryContentModal />
-                {/* <EntryContent hasEntries={hasEntries}/> */}
                 <AddEntryModal />
                 <QRModal />
                 <EntryReportModal show={showEntryReportModal} setShow={setShowEntryReportModal}/>
             </ul>
+            }
         </div>
     );
 }

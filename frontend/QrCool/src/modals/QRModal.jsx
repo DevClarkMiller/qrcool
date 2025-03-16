@@ -29,9 +29,10 @@ function ColorController({color, setColor, label="", tooltip="tooltip"}){
                 style={{color: color}}
                 type="button" 
                 onClick={colorClick} 
+                onTouch
                 className="text-3xl">
                     <IoIosColorPalette />
-                    <input value={color} ref={colorRef} onChange={e => setColor(e.target.value)} type="color" className="w-1/3 hidden"/>
+                    <input value={color} ref={colorRef} onChange={e => setColor(e.target.value)} type="color" className="opacity-0 w-0 h-0 absolute"/>
                 </button>
             </a>
             <Tooltip id={`color-${label}`}>
