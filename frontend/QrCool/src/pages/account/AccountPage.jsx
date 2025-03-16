@@ -11,7 +11,7 @@ import FormButton from "../../components/FormButton";
 // import { AccountContext } from "../../App";
 import { AccountContext } from "../../context/AccountProvider";
 
-const CreateAccount = ({onSubmit, isLogin}) => {
+const CreateAccount = ({onSubmit, isLogin, link = null}) => {
     const navigate = useNavigate();
     const { accountController, account } = useContext(AccountContext);
 
@@ -39,6 +39,7 @@ const CreateAccount = ({onSubmit, isLogin}) => {
             
             <div className="w-full flex justify-between items-center gap-3">
                 <FormButton type="submit">{isLogin ? "Login" : "Create Account"}</FormButton>
+                {link}
                 <Link to={isLogin ? "/createAccount" : "/login"}>{isLogin ? "Create Account" : "Login"}</Link>
             </div>
         </form>
