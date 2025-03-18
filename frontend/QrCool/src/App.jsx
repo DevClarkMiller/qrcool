@@ -20,9 +20,14 @@ import Settings from './pages/settings/Settings';
 import AppProvider from './context/AppProvider';
 import AccountProvider from './context/AccountProvider';
 import ContentProvider from './context/ContentProvider';
+import { useEffect } from 'react';
 
 
 function App() {
+  useEffect(() =>{
+    localStorage.removeItem('entries'); // Entries should be reset on initial load
+  }, []);
+
   return (
     <AppProvider>
       <AccountProvider>

@@ -1,6 +1,8 @@
 import { useMemo, useEffect, useReducer, useRef, useState } from "react";
 import Controller from "../../tools/controller";
 
+import makeEntryStale from "../../../lib/makeEntryStale";
+
 // Custom hook
 import useFileState from '../../hooks/content/useFileState';
 
@@ -68,8 +70,25 @@ function useEntryContentController(
         }
     
         async get(entry){
+          // Check to see if the entrys content is in local storage
+          const store = localStorage.getItem(`entry-${entry.Id}`);
+          let ents = localStorage.getItem('entries');
+          if (!ents) ents = {}; // Inits as a new dictionary
+          else ents = JSON.parse(ents);
+
+          if (ents[entry.Id]){
+            setEntryContent(ents[entry.Id]);
+            setActiveEntry(entry);
+            setShowModal(true);
+            return;
+          }
           super.get(`/entryContent/${entry.Id}`, response =>{
             setEntryContent(response.data);
+
+            // Updates the localstorage entries store to be up to date
+            ents[entry.Id] = response.data;
+            localStorage.setItem('entries', JSON.stringify(ents));
+
             setActiveEntry(entry);
             setShowModal(true);
           }, null);
@@ -80,6 +99,7 @@ function useEntryContentController(
             this.appContext.setHeaderStatus("text-green-500", response.data, 2500);
             // Refetch the entry to show the change in active entryContent
             const entry = entryController.getById(entryContent.EntryId);
+            makeEntryStale(entry.Id);
             this.get(entry);
           });
         }
@@ -90,6 +110,7 @@ function useEntryContentController(
             // Only refetch the entry content if it's active
             if (entCon.IsActive){
               const entry = entryController.getById(entCon.EntryId);
+              makeEntryStale(entry.Id);
               this.get(entry);
             }else{
               const newEntryContent = entryContent.filter(ec => ec.Id !== entCon.Id);
@@ -103,6 +124,7 @@ function useEntryContentController(
             this.appContext.setHeaderStatus("text-green-500", response.data, 2500);
             // Refetch entry content after to be up to date
             const entry = entryController.getById(entryId);
+            makeEntryStale(entry.Id);
             this.get(entry);
           });
         }
@@ -111,6 +133,7 @@ function useEntryContentController(
           super.postFile(`/entryContent/file/${entryId}/${entryContentRef.current.Content.ContentTypeId}/${entryContentRef.current.Content.Name}`, fileRef.current, response =>{
             this.appContext.setHeaderStatus("text-green-500", response.data, 2500);
             const entry = entryController.getById(entryId);
+            makeEntryStale(entry.Id);
             this.get(entry);
           }, err =>{
             if (err?.response){ 

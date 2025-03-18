@@ -20,7 +20,7 @@ function BlobContent({data, loadingMsg, children, type, loading}){
     return (<>{loading ? 
             <p className="text-3xl">{loadingMsg}</p> : 
             React.cloneElement(children, { src: blobURL })
-        }</>);
+    }</>);
 }
 
 function VideoContent({data, blobURL, loading}){

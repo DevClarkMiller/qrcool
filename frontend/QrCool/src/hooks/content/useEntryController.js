@@ -1,4 +1,6 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
+
+import makeEntryStale from "../../../lib/makeEntryStale";
 
 import Controller from "../../tools/controller";
 
@@ -47,6 +49,7 @@ function useEntryController(appContext, entries, setEntries){
             appContext.setHeaderStatus("text-green-500", response.data, 2500);
             let newEntries = entries.filter((entry) => entry.Id !== entryId)
             setEntries(newEntries);
+            makeEntryStale(entryId);
           }, err => this.appContext.handleErr(err, true));
         }
 
