@@ -14,42 +14,41 @@ function TextContent({data}){
     );
 }
 
-function BlobContent({data, loadingMsg, children, type}){
+function BlobContent({data, loadingMsg, children, type, loading}){
     const blobURL = useBlobUrl(data, type);
 
-    if (!blobURL) {
-        return <p>{loadingMsg}</p>;
-    }
-
-    return React.cloneElement(children, { src: blobURL });
+    return (<>{loading ? 
+            <p className="text-3xl">{loadingMsg}</p> : 
+            React.cloneElement(children, { src: blobURL })
+        }</>);
 }
 
-function VideoContent({data, blobURL}){
+function VideoContent({data, blobURL, loading}){
     return(
-        <BlobContent type="video/mp4" data={data} loadingMsg="Loading video...">
-            <video controls className="w-full " src={blobURL}/>
+        <BlobContent type="video/mp4" data={data} loadingMsg="Loading video..." loading={loading}>
+            <video controls className="w-full" src={blobURL}/>
         </BlobContent>
     );
 }
 
-function ImageContent({data, blobURL}){
+function ImageContent({data, blobURL, loading}){
     return(
-        <BlobContent type="image/png" data={data} loadingMsg="Loading image...">
-            <img className="w-full md:w-1/3" src={blobURL} />
+        <BlobContent type="image/png" data={data} loadingMsg="Loading image..." loading={loading}>
+            <img className="w-full lg:w-1/3" src={blobURL} />
         </BlobContent>
     );
 }
 
-function AudioContent({data, blobURL}){
+function AudioContent({data, blobURL, loading}){
     return(
-        <BlobContent data={data} type="audio/mp3"  loadingMsg="Loading audio...">
+        <BlobContent data={data} type="audio/mp3"  loadingMsg="Loading audio..." loading={loading}>
             <audio controls className="w-full md:w-1/3" src={blobURL}/>
         </BlobContent>
     );
 }
 
 function useContent(){
-    const { entryContentController, anonymousData} = useContext(ContentContext);
+    const { entryContentController, anonymousData, anonymousDataLoading} = useContext(ContentContext);
     
     const params = useParams();
 
@@ -72,16 +71,16 @@ function useContent(){
     useEffect(() =>{
         switch(params?.contentType){
             case "Text":
-                setContent(<TextContent data={anonymousData}/>);
+                setContent(<TextContent data={anonymousData} />);
                 break;
             case "Image":
-                setContent(<ImageContent data={anonymousData}/>);
+                setContent(<ImageContent data={anonymousData} loading={anonymousDataLoading}/>);
                 break;
             case "Video":
-                setContent(<VideoContent data={anonymousData} /> );
+                setContent(<VideoContent data={anonymousData} loading={anonymousDataLoading} /> );
                 break;
             case "Audio":
-                setContent(<AudioContent data={anonymousData}/>);
+                setContent(<AudioContent data={anonymousData} loading={anonymousDataLoading}/>);
                 break;
         }
     }, [anonymousData]);

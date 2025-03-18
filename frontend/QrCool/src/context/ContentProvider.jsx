@@ -28,12 +28,12 @@ const ContentProvider = ({children}) =>{
 
   const {contentType, contentTypeController} = useContentTypeController(context, account);
 
-  const {entriesLoading, setEntriesLoading, entryController} = useEntryController(context, entries, setEntries);
-  const { anonymousData, file, setFile, fileRef, entryContent, entryContentRed, entryContentRef, entryContentController } = useEntryContentController(context, entryController, setActiveEntry, setShowModal);
+  const {entriesLoading, entryController} = useEntryController(context, entries, setEntries);
+  const { anonymousData, anonymousDataLoading, file, setFile, fileRef, entryContent, entryContentRed, entryContentRef, entryContentController } = useEntryContentController(context, entryController, setActiveEntry, setShowModal);
   const { contentController } = useContentController(context, entryContentRef)
 
   return(
-      <ContentContext.Provider value={{ setActiveEntry, entries, entryContent, entryContentRed, contentType, activeEntry, entryController, entryContentController, contentTypeController, contentController, entryContentRef, entryName, setEntryName, anonymousData, file, setFile, fileRef, qrValue, setQrValue, entriesLoading}}>
+      <ContentContext.Provider value={{ anonymousDataLoading, setActiveEntry, entries, entryContent, entryContentRed, contentType, activeEntry, entryController, entryContentController, contentTypeController, contentController, entryContentRef, entryName, setEntryName, anonymousData, file, setFile, fileRef, qrValue, setQrValue, entriesLoading}}>
           {children}
       </ContentContext.Provider>
   );

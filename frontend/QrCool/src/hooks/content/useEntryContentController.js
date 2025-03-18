@@ -16,6 +16,7 @@ function useEntryContentController(
   // State
   const [entryContent, setEntryContent] = useState(null);
   const [anonymousData, setAnonymousData] = useState(null);
+  const [anonymousDataLoading, setAnonymousDataLoading] = useState(true);
 
   // Reducers
   const [entryContentRed, dispatchEntryContent] = useReducer(entryContentReducer, INITIAL_ENTRYCONTENT_STATE);
@@ -126,13 +127,15 @@ function useEntryContentController(
             super.get(`/entryContent/anonymous/${entryContentId}`, response =>{
               this.appContext.setHeaderStatus("text-green-500", "Found content", 2500);
               setAnonymousData(response.data);
-            }, null, location);
+              setAnonymousDataLoading(false);
+            }, err => setAnonymousDataLoading(false), location);
             break;
           default:
             super.getBlob(`/entryContent/anonymous/${entryContentId}`, response =>{
               this.appContext.setHeaderStatus("text-green-500", "Found content", 2500);
               setAnonymousData(response.data);
-            }, null, location);
+              setAnonymousDataLoading(false);
+            }, err => setAnonymousDataLoading(false), location);
           }
         }
       }
@@ -140,7 +143,7 @@ function useEntryContentController(
       return new EntryContentController(appContext);
   }, [appContext]);
 
-  return {anonymousData, entryContent, setEntryContent, entryContentRed, dispatchEntryContent, entryContentRef, entryContentController, file, setFile, fileRef};
+  return {anonymousData, anonymousDataLoading, entryContent, setEntryContent, entryContentRed, dispatchEntryContent, entryContentRef, entryContentController, file, setFile, fileRef};
 }
 
 export default useEntryContentController;
