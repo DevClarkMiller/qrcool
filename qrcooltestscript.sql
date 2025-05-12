@@ -18,7 +18,9 @@ INNER JOIN Entry e
 INNER JOIN ContentType ct
 	ON c.ContentTypeId = ct.Id;
 
-SELECT * FROM EntryView;
+SELECT ev.Id, e.Name, ev.ContentId, ev.Timestamp, ev.Latitude, ev.Longitude
+FROM EntryView ev
+INNER JOIN Entry e ON e.Id = ev.EntryId;
 
 --SELECT * FROM EntryContent;
 --SELECT * FROM Content;

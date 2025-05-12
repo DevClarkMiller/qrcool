@@ -9,7 +9,10 @@
     "start:prod": "cross-env NODE_ENV=production npx tsx ./src/index.ts",
     "start": "npx tsx ./src/index.ts",
     "test:dev": "cross-env NODE_ENV=development tsc && jest",
-    "test:prod": "cross-env NODE_ENV=production jest"
+    "test:prod": "cross-env NODE_ENV=production jest",
+    "build:image": "docker build -t qrcoolimage .",
+    "save:image": "docker save -o qrcoolimage.tar qrcoolimage",
+    "deploy": "scp ./qrcoolimage.tar miller@10.0.0.212:/home/miller"
   },
   "keywords": [],
   "author": "Clark Miller",

@@ -1,0 +1,14 @@
+Dockerfile
+
+# Misc
+Demo.gif
+qrcoolbuildscript.sql
+qrcooltestscript.sql
+qrcoolERD.drawio
+TechStack.json
+README.md
+
+node_modules
+.gitignore
+.vscode
+.git
