@@ -1,12 +1,19 @@
 FROM node:22-alpine
-WORKDIR /home/node/app
 
-COPY . .
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json first for caching dependencies
+COPY package*.json ./
 
 # Install dependencies
 RUN npm install 
 
-RUN npx prisma generate
+COPY . .
+
+RUN npm run prisma:generate
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
 
 EXPOSE 5000
-CMD ["npm", "run", "start:prod"]
