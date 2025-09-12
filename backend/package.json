@@ -12,7 +12,7 @@
     "test:dev": "cross-env NODE_ENV=development tsc && jest",
     "test:prod": "cross-env NODE_ENV=production jest",
     "build:image": "docker build -t qrcoolimage .",
-    "save:image": "docker save -o qrcoolimage.tar qrcoolimage",
+    "save:image": "docker save -o qrcoolimage.tar qrcoolimage:latest",
     "deploy": "scp ./qrcoolimage.tar miller@10.0.0.212:/home/miller",
     "deploy:full": "npm run build:image && npm run save:image && npm run deploy"
   },
