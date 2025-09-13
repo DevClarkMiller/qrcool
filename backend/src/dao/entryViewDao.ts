@@ -1,10 +1,10 @@
+import { AppContext } from "src/AppContext";
 import Dao  from "./dao";
-import { db } from "../index";
 import { Location } from '../types';
 import { EntryView } from "@prisma/client";
 
-export default class EntryViewDao extends Dao{
-    public constructor(){ super(db.entryView); }
+export default class EntryViewDao extends Dao<typeof AppContext.DB.entryView>{
+    public constructor(){ super(AppContext.DB.entryView); }
 
     public async add(entryId: number, contentId?: number, location?: Location): Promise<any>{
         try{
@@ -22,7 +22,7 @@ export default class EntryViewDao extends Dao{
             if (contentId)
                 data["ContentId"] = contentId;
 
-            return await db.entryView.create({data: data});
+            return await this.model.create({data: data});
         }catch(err: any){
             console.error(err.message);
             throw err;
@@ -33,7 +33,7 @@ export default class EntryViewDao extends Dao{
     */
     public async count(entryId: number): Promise<any>{
         try{
-            return await db.entryView.count({
+            return await this.model.count({
                 where: { EntryId: entryId }
             });
         }catch(err: any){

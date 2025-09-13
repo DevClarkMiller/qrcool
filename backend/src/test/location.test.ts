@@ -1,5 +1,5 @@
 import loadEnv from '../infrastructure/loadEnv';
-import {describe, expect, test} from '@jest/globals';
+import {describe, expect} from '@jest/globals';
 import CoordsTranslator from '../infrastructure/coordsTranslator';
 import { LocationPlace } from 'src/types';
 

@@ -1,7 +1,15 @@
-import { db } from "src";
+type PrismaDelegate = {
+  findFirstOrThrow: (args: any) => Promise<any>;
+  findMany: (args?: any) => Promise<any>;
+  create: (args: any) => Promise<any>;
+  update: (args: any) => Promise<any>;
+  updateMany: (args: any) => Promise<any>;
+  delete: (args: any) => Promise<any>;
+  deleteMany: (args: any) => Promise<any>;
+};
 
-export default abstract class Dao{
-    private model: any;
+export default abstract class Dao<MODEL_TYPE extends PrismaDelegate>{
+    protected model: MODEL_TYPE;
     
     public constructor(model: any){ this.model = model; }
 

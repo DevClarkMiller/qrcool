@@ -1,13 +1,12 @@
+import { AppContext } from "src/AppContext";
 import Dao  from "./dao";
-import { BUCKET_NAME, db } from "../index";
 import { EntryContent, Content, Account, Entry } from "@prisma/client";
 import ContentDao from "./contentDao";
 import { UploadedFile } from "express-fileupload";
-import { fileManager } from "../index";
 import stream from 'stream';
 
-export default class EntryContentDao extends Dao{
-    public constructor(){ super(db.entryContent); }
+export default class EntryContentDao extends Dao<typeof AppContext.DB.entryContent>{
+    public constructor(){ super(AppContext.DB.entryContent); }
 
     public async deleteByEntry(entryId: number | null) : Promise<any>{
         try{
@@ -47,7 +46,7 @@ export default class EntryContentDao extends Dao{
 
             // Delete if it's a file from minio
             if (content != null && conDao.isFile(content))
-                await fileManager.delete(BUCKET_NAME, content.Path as string);
+                await AppContext.FileManager.delete(AppContext.BucketName, content.Path as string);
 
             // Check if the entryContent is the active content, if so set the first content to be active
             let ecToSetActive: EntryContent | null = await this.getOne({IsActive: false});
@@ -144,9 +143,9 @@ export default class EntryContentDao extends Dao{
     public async addFileUpload(entry: Entry, name: string | null, file: UploadedFile, account: Account, contentTypeId: number | null){
         try{
             // Create a fileStream from the buffer
-            const fileStream: stream.PassThrough = fileManager.bufferToStream(file.data);
+            const fileStream: stream.PassThrough = AppContext.FileManager.bufferToStream(file.data);
 
-            const ecCount = await db.entryContent.count({where: { EntryId: entry.Id }});
+            const ecCount = await this.model.count({where: { EntryId: entry.Id }});
                     
             if (ecCount >= parseInt(process.env.ENTRY_CONTENT_LIMIT as string))
                 throw new Error("EntryContent limit reach for Entry");
@@ -164,7 +163,7 @@ export default class EntryContentDao extends Dao{
             const path = `${account.Username}/${entry.Name}/${file.name}`;
 
             // First upload the file to minio, any errors will cause it to not commit to the db
-            await fileManager.post(BUCKET_NAME, path, fileStream, file.size);
+            await AppContext.FileManager.post(AppContext.BucketName, path, fileStream, file.size);
 
             const newContent: Content = await contDao.add({Name: name, Text: file.name, Path: path, ContentTypeId: contentTypeId});
             if (!newContent)
@@ -190,7 +189,7 @@ export default class EntryContentDao extends Dao{
 
             const contDao = new ContentDao();
 
-            const ecCount = await db.entryContent.count({where: { EntryId: entryId }});
+            const ecCount = await this.model.count({where: { EntryId: entryId }});
                     
             if (ecCount >= parseInt(process.env.ENTRY_CONTENT_LIMIT as string))
                 throw new Error("EntryContent limit reach for Entry");

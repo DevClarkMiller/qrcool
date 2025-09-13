@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import EntryViewDao from "../dao/entryViewDao";
 import EntryDao from "src/dao/entryDao";
 import { Entry } from "@prisma/client";
-import { EntryView } from "@prisma/client";
 import { handleErr, RequestError } from "../infrastructure/errors";
 
 

@@ -1,9 +1,9 @@
+import { AppContext } from "src/AppContext";
 import Dao  from "./dao";
-import { db } from "../index";
 import { Content } from "@prisma/client";
 
-export default class ContentDao extends Dao{
-    public constructor(){ super(db.content); }
+export default class ContentDao extends Dao<typeof AppContext.DB.content>{
+    public constructor(){ super(AppContext.DB.content); }
 
     public async getByEntry(entryId: number | null){
         try{

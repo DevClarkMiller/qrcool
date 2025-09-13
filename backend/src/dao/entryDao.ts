@@ -1,16 +1,16 @@
+import { AppContext } from "src/AppContext";
 import Dao from "./dao";
 import EntryContentDao from "./entryContentDao";
-import { BUCKET_NAME, db, fileManager } from "../index";
 import { Account, Entry } from "@prisma/client";
 
-export default class EntryDao extends Dao{
-    public constructor(){ super(db.entry); }
+export default class EntryDao extends Dao<typeof AppContext.DB.entry>{
+    public constructor(){ super(AppContext.DB.entry); }
 
     /*Brief: Deletes everything in the entries location on minio
     */
     public async deleteEntryFiles(entry: Entry, account: Account){
         try{
-            await fileManager.deleteFolder(BUCKET_NAME, `${account.Username}/${entry.Name}/`);
+            await AppContext.FileManager.deleteFolder(AppContext.BucketName, `${account.Username}/${entry.Name}/`);
         }catch(err: any){
             console.error(err); // Not sure what the error could be
         }
@@ -68,7 +68,7 @@ export default class EntryDao extends Dao{
         if (!accountId)
             return await super.add(data);
 
-        const entryCount = await db.entry.count({where: { AccountId: accountId}});
+        const entryCount = await this.model.count({where: { AccountId: accountId}});
         if (entryCount >= 5)
             throw new Error("Entry limit reached");
 

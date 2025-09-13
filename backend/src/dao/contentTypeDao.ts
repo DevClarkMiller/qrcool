@@ -1,6 +1,6 @@
+import { AppContext } from "src/AppContext";
 import Dao  from "./dao";
-import { db } from "../index";
 
-export default class ContentTypeDao extends Dao{
-    public constructor(){ super(db.contentType); }
+export default class ContentTypeDao extends Dao<typeof AppContext.DB.contentType>{
+    public constructor(){ super(AppContext.DB.contentType); }
 }

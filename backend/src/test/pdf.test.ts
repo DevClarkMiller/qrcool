@@ -1,5 +1,5 @@
 import loadEnv from 'src/infrastructure/loadEnv';
-import {describe, expect, test} from '@jest/globals';
+import {describe} from '@jest/globals';
 import PDFDocument from 'pdfkit-table';
 import fs from 'fs';
 

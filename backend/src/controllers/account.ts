@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Account } from "@prisma/client";
-import { login, register, activate, verifyPassword } from '../infrastructure/accountValidation';
+import { login, register, activate } from '../infrastructure/accountValidation';
 import AccountDao from "../dao/accountDao";
 import { AccountError, handleErr, RequestError } from '../infrastructure/errors';
 

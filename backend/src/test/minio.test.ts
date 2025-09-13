@@ -1,4 +1,3 @@
-import fs from 'fs';
 import loadEnv from 'src/infrastructure/loadEnv';
 import {describe, expect, test} from '@jest/globals';
 import * as Minio from 'minio';

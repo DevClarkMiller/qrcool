@@ -1,12 +1,12 @@
+import { AppContext } from "src/AppContext";
 import Dao  from "./dao";
 import * as bcrypt from 'bcryptjs'; 
-import { db } from "../index";
 import { Account, Entry } from "@prisma/client";
 import { verifyPassword } from "src/infrastructure/accountValidation";
 import EntryDao from "./entryDao";
 
-export default class AccountDao extends Dao{
-    public constructor(){ super(db.account); }
+export default class AccountDao extends Dao<typeof AppContext.DB.account>{
+    public constructor(){ super(AppContext.DB.account); }
 
     public async getByUsername(username: string | null): Promise<Account | null>{
         try{
@@ -28,7 +28,7 @@ export default class AccountDao extends Dao{
     
     public async count(): Promise<number>{
         try{
-            return await db.account.count();
+            return await this.model.count();
         }catch(err: any){
             console.error(`Couldn't get count: ${err.message}`);
             return 0;
@@ -38,7 +38,7 @@ export default class AccountDao extends Dao{
     public async resetPassword(account: Account, newPassword: string): Promise<any>{
         try{
             const hashedPass = await bcrypt.hash(newPassword, 5);
-            await db.account.update({where: {Id: account.Id}, data: {Password: hashedPass}});
+            await this.model.update({where: {Id: account.Id}, data: {Password: hashedPass}});
         }catch(err: any){
             console.error(err);
             throw err;   
