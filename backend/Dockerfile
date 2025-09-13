@@ -1,5 +1,8 @@
 FROM node:22-alpine
 
+WORKDIR /
+COPY testEntrypoint.sh ./
+
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json first for caching dependencies
