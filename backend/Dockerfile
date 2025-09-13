@@ -2,6 +2,7 @@ FROM node:22-alpine
 
 WORKDIR /
 COPY testEntrypoint.sh ./
+RUN chmod +x testEntrypoint.sh
 
 WORKDIR /usr/src/app
 
