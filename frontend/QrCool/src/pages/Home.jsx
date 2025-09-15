@@ -85,7 +85,7 @@ function AnonymousView(){
 }
 
 function LoggedInView(){
-    const {account} = useContext(AccountContext);
+    const { account } = useContext(AccountContext);
 
     const quote = useQuote();
     const emoji = useEmoji();

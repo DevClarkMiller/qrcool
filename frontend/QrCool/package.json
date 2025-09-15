@@ -4,10 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start:dev": "cross-env NODE_ENV=development vite",
-    "start:prod": "cross-env NODE_ENV=production vite",
-    "build:dev": "cross-env NODE_ENV=development vite build",
-    "build:prod": "cross-env NODE_ENV=production vite build",
+    "start:dev": "vite --mode staging",
+    "start:prod": "vite --mode production",
+    "build:dev": "vite build --mode staging",
+    "build:prod": "vite build --mode production",
     "lint": "eslint .",
     "preview": "vite preview"
   },

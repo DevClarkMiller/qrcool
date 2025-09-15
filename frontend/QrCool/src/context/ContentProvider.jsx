@@ -23,12 +23,12 @@ const ContentProvider = ({children}) =>{
   const [qrValue, setQrValue] = useState("");
 
   // Context
-  const {account} = useContext(AccountContext);
-  const {setShowModal} = useContext(AppContext);
+  const { account } = useContext(AccountContext);
+  const { setShowModal } = useContext(AppContext);
 
-  const {contentType, contentTypeController} = useContentTypeController(context, account);
+  const { contentType, contentTypeController } = useContentTypeController(context, account);
 
-  const {entriesLoading, entryController} = useEntryController(context, entries, setEntries);
+  const { entriesLoading, entryController } = useEntryController(context, entries, setEntries);
   const { anonymousData, anonymousDataLoading, file, setFile, fileRef, entryContent, entryContentRed, entryContentRef, entryContentController } = useEntryContentController(context, entryController, setActiveEntry, setShowModal);
   const { contentController } = useContentController(context, entryContentRef)
 

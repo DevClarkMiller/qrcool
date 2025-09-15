@@ -58,6 +58,11 @@ function useEntryController(appContext, entries, setEntries){
             appContext.setHeaderStatus("text-green-500", response.data, 2500);
           });
         }
+
+        clear(){
+          localStorage.removeItem('entries');
+          setEntries([]);
+        }
       }
 
       return new EntryController(appContext)

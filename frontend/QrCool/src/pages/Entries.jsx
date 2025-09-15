@@ -99,13 +99,13 @@ const AddEntry = ({hasEntries}) =>{
 }
 
 const Entries = () => {
-    const {entries, entryController, entriesLoading} = useContext(ContentContext);
-    const {showEntryReportModal, setShowEntryReportModal} = useContext(AppContext);
+    const { entries, entryController, entriesLoading } = useContext(ContentContext);
+    const { showEntryReportModal, setShowEntryReportModal } = useContext(AppContext);
 
     const hasEntries = useMemo(() => entries && entries?.length > 0, [entries]);
 
     useEffect(() =>{ 
-        if (!entries) entryController.get(); 
+        if (!entries || entries.length == 0) entryController.get(); 
     }, []);
 
     return (
