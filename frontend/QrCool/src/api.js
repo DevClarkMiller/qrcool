@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+export const getEndpoint = () => { return import.meta.env.VITE_ENDPOINT };
+
 export default axios.create({
-    baseURL: `${import.meta.env.VITE_ENDPOINT}/api`
+    baseURL: `${getEndpoint()}/api`
 });

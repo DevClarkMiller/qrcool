@@ -23,6 +23,7 @@ import { TbReportAnalytics } from "react-icons/tb";
 import { ContentContext } from "../context/ContentProvider";
 import { AppContext } from "../context/AppProvider";
 import { AccountContext } from "../context/AccountProvider";
+import { getEndpoint } from "../api";
 
 const Entry = ({entry}) =>{
     const { entryController, entryContentController, setQrValue, setActiveEntry } = useContext(ContentContext);
@@ -38,7 +39,7 @@ const Entry = ({entry}) =>{
 
     const onClickQr = () =>{
         setShowQrModal(true);
-        const qrVal = `${process.env.VITE_ENDPOINT}/${account.Username}/${entry.Name}`;
+        const qrVal = `${getEndpoint()}/${account.Username}/${entry.Name}`;
         setQrValue({qr: qrVal, entry: entry});
     }
 
