@@ -5,18 +5,6 @@ pipeline {
         NODE_ENV = 'production'
     }
 
-    def frontendChanges() {
-        return (
-            changeset "frontend/**" ||
-            changeset "Jenkinsfile"
-        )
-    }
-
-    def backendChanges() {
-        return (
-            changeset "backend/**"
-        )
-    }
 
     stages {
         stage("Checkout") {
@@ -26,7 +14,12 @@ pipeline {
         }
 
         stage("Install Dependencies Frontend") {
-            when { expression frontendChanges() }
+            when { 
+                anyof {
+                    changeset "frontend/**"
+                    changeset "Jenkinsfile"
+                }
+            }
             steps {
                 dir('frontend/QrCool') {
                     sh 'NODE_ENV=development npm ci'
@@ -47,7 +40,7 @@ pipeline {
         }
 
         stage("Install Dependencies Backend") {
-            when { expression backendChanges() }
+            when { changeset "backend/**" }
             steps {
                 dir('backend') {
                     sh "npm install"
@@ -69,7 +62,12 @@ pipeline {
         }
 
         stage ("Build Frontend") {
-            when { expression frontendChanges() }
+            when { 
+                anyof {
+                    changeset "frontend/**"
+                    changeset "Jenkinsfile"
+                }
+            }
             steps {
                 dir('frontend/QrCool') {
                     sh "npm run build:prod"
@@ -78,7 +76,7 @@ pipeline {
         }
 
         stage("Build Backend") {
-            when { expression backendChanges() }
+            when { changeset "backend/**" }
             steps {
                 dir('backend') {
                     sh 'npm run build:image'
@@ -87,7 +85,7 @@ pipeline {
         }
 
         stage("Test") {
-            when { expression backendChanges() }
+            when { changeset "backend/**" }
             steps {
                 dir('backend') {
                     sh 'docker run --rm -i --entrypoint sh qrcoolimage -c "sh ./testEntrypoint.sh"'   
@@ -96,7 +94,12 @@ pipeline {
         }
 
         stage("Deploy Frontend") {
-            when { expression frontendChanges() }
+            when { 
+                anyof {
+                    changeset "frontend/**"
+                    changeset "Jenkinsfile"
+                }
+            }
             steps {
                 dir('frontend/QrCool') {
                     sh 'scp -r dist/* clark@clarkmiller.ca:/var/www/qrcool.ca/html'
@@ -105,7 +108,7 @@ pipeline {
         }
 
         stage("Deploy Backend") {
-            when { expression backendChanges() }
+            when { changeset "backend/**" }
             steps {
                 dir('backend') {
                     sh 'npm run save:image'
