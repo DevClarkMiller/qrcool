@@ -17,7 +17,7 @@ pipeline {
             when { changeset "frontend/**" }
             steps {
                 dir('frontend/QrCool') {
-                    sh 'npm install'
+                    sh 'npm ci'
                     withCredentials([file(credentialsId: 'qrcool-frontend-staging-env', variable: 'ENV_FILE')]) {
                         script {
                             def secretContent = readFile(env.ENV_FILE)
