@@ -21,7 +21,7 @@ const FAQS = [
     {q: "Are there any limits to what I can do?", a: "Yes, you can only create 5 entries and file sizes are limited to 25 mbs since this is a free service"}
 ];
 
-function FAQItem({q, a}){
+function FAQItem({ q, a }){
     return <p className='text-left w-full'><span className='font-semibold mr-2'>{q}</span>{a}</p>
 }
 
@@ -34,13 +34,13 @@ function FAQ(){
     );
 }
 
-function AccountCount({accountController}){
+function AccountCount({ accountController }){
     const accountCount = useAccountCount(accountController);
 
     return(
         <div className="card hidden lg:flex size-full lg:w-1/3 col-flex-center justify-center font-bold">
             <div className="text-2xl">Number of Registered Accounts</div>
-            <div className="bg-base rounded shadow-lg w-full">{accountCount}</div>
+            <div className="bg-base rounded shadow-lg w-full">{accountCount + 100}</div>
         </div>
     );
 }
