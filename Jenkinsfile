@@ -17,7 +17,7 @@ pipeline {
             description: 'Force backend stage to run even if no changes detected'
         )
     }
-    
+
     stages {
         stage("Checkout") {
             steps {
@@ -156,7 +156,7 @@ pipeline {
                 //     sh 'ssh sys1.clarkmiller.ca "docker load -i qrcoolimage.tar"'
                 //     sh 'ssh sys1.clarkmiller.ca "docker compose stop qrcool ; docker compose rm -f qrcool; docker compose up -d qrcool"'
                 // }
-                sh 'docker compose stop qrcool ; docker compose rm -f qrcool; docker compose up -d qrcool'
+                sh 'ssh sys1.clarkmiller.ca "docker compose stop qrcool ; docker compose rm -f qrcool; docker compose up -d qrcool"'
             }
         }
     }
