@@ -15,7 +15,7 @@ pipeline {
 
         stage("Install Dependencies Frontend") {
             when { 
-                andOf {
+                anyOf {
                     changeset "frontend/**"
                     changeset "Jenkinsfile"
                 }
@@ -63,7 +63,7 @@ pipeline {
 
         stage ("Build Frontend") {
             when { 
-                andOf {
+                anyOf {
                     changeset "frontend/**"
                     changeset "Jenkinsfile"
                 }
@@ -95,7 +95,7 @@ pipeline {
 
         stage("Deploy Frontend") {
             when { 
-                andOf {
+                anyOf {
                     changeset "frontend/**"
                     changeset "Jenkinsfile"
                 }
