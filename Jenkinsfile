@@ -20,10 +20,8 @@ pipeline {
 
     def loadEnvFile(String projectTier, String environment, String fileName) {
         withCredentials([file(credentialsId: 'qrcool-' + projectTier + '-' + environment + '-env', variable: 'ENV_FILE')]) {
-            script {
-                def secretContent = readFile(env.ENV_FILE)
-                writeFile file: fileName, text: secretContent
-            }
+            def secretContent = readFile(env.ENV_FILE)
+            writeFile file: fileName, text: secretContent
         }
     }
 
