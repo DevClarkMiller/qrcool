@@ -1,3 +1,5 @@
+@Library('pipeline-lib')
+
 pipeline {
     agent any
 
@@ -16,13 +18,6 @@ pipeline {
             defaultValue: false,
             description: 'Force backend stage to run even if no changes detected'
         )
-    }
-
-    def loadEnvFile(String projectTier, String environment, String fileName) {
-        withCredentials([file(credentialsId: 'qrcool-' + projectTier + '-' + environment + '-env', variable: 'ENV_FILE')]) {
-            def secretContent = readFile(env.ENV_FILE)
-            writeFile file: fileName, text: secretContent
-        }
     }
 
     stages {
@@ -71,14 +66,12 @@ pipeline {
                 dir('backend') {
                     sh "npm install"
                     
-                    loadEnvFile('backend', 'development', '.env.development')
-                    // withCredentials([file(credentialsId: 'qrcool-backend-development-env', variable: 'ENV_FILE')]) {
-                    //     script {
-                    //         def secretContent = readFile(env.ENV_FILE)
-                    //         writeFile file: '.env.development', text: secretContent
-                    //     }
-                    // }
-
+                    withCredentials([file(credentialsId: 'qrcool-backend-development-env', variable: 'ENV_FILE')]) {
+                        script {
+                            def secretContent = readFile(env.ENV_FILE)
+                            writeFile file: '.env.development', text: secretContent
+                        }
+                    }
 
                     withCredentials([file(credentialsId: 'qrcool-backend-production-env', variable: 'ENV_FILE')]) {
                         script {
