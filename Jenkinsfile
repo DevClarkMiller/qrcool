@@ -5,6 +5,9 @@ pipeline {
         NODE_ENV = 'production'
     }
 
+    def FRONTEND_PATHS = ["frontend/**", "Jenkinsfile"]
+    def BACKEND_PATHS = ["backend/**", "Jenkinsfile"]
+
 
     stages {
         stage("Checkout") {
@@ -14,10 +17,9 @@ pipeline {
         }
 
         stage("Install Dependencies Frontend") {
-            when { 
+            when {
                 anyOf {
-                    changeset "frontend/**"
-                    changeset "Jenkinsfile"
+                    FRONTEND_PATHS.each { p -> changeset p }
                 }
             }
             steps {
@@ -40,10 +42,9 @@ pipeline {
         }
 
         stage("Install Dependencies Backend") {
-            when { 
+            when {
                 anyOf {
-                    changeset "backend/**"
-                    changeset "Jenkinsfile"
+                    BACKEND_PATHS.each { p -> changeset p }
                 }
             }
             steps {
@@ -67,10 +68,9 @@ pipeline {
         }
 
         stage ("Build Frontend") {
-            when { 
+            when {
                 anyOf {
-                    changeset "frontend/**"
-                    changeset "Jenkinsfile"
+                    FRONTEND_PATHS.each { p -> changeset p }
                 }
             }
             steps {
@@ -81,10 +81,9 @@ pipeline {
         }
 
         stage("Build Backend") {
-            when { 
+            when {
                 anyOf {
-                    changeset "backend/**"
-                    changeset "Jenkinsfile"
+                    BACKEND_PATHS.each { p -> changeset p }
                 }
             }
             steps {
@@ -95,10 +94,9 @@ pipeline {
         }
 
         stage("Test") {
-            when { 
+            when {
                 anyOf {
-                    changeset "backend/**"
-                    changeset "Jenkinsfile"
+                    BACKEND_PATHS.each { p -> changeset p }
                 }
             }
             steps {
@@ -109,10 +107,9 @@ pipeline {
         }
 
         stage("Deploy Frontend") {
-            when { 
+            when {
                 anyOf {
-                    changeset "frontend/**"
-                    changeset "Jenkinsfile"
+                    FRONTEND_PATHS.each { p -> changeset p }
                 }
             }
             steps {
@@ -123,10 +120,9 @@ pipeline {
         }
 
         stage("Deploy Backend") {
-            when { 
+            when {
                 anyOf {
-                    changeset "backend/**"
-                    changeset "Jenkinsfile"
+                    BACKEND_PATHS.each { p -> changeset p }
                 }
             }
             steps {
