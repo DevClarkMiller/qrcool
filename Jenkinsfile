@@ -40,7 +40,12 @@ pipeline {
         }
 
         stage("Install Dependencies Backend") {
-            when { changeset "backend/**" }
+            when { 
+                anyOf {
+                    changeset "backend/**"
+                    changeset "Jenkinsfile"
+                }
+            }
             steps {
                 dir('backend') {
                     sh "npm install"
@@ -76,7 +81,12 @@ pipeline {
         }
 
         stage("Build Backend") {
-            when { changeset "backend/**" }
+            when { 
+                anyOf {
+                    changeset "backend/**"
+                    changeset "Jenkinsfile"
+                }
+            }
             steps {
                 dir('backend') {
                     sh 'npm run build:image'
@@ -85,7 +95,12 @@ pipeline {
         }
 
         stage("Test") {
-            when { changeset "backend/**" }
+            when { 
+                anyOf {
+                    changeset "backend/**"
+                    changeset "Jenkinsfile"
+                }
+            }
             steps {
                 dir('backend') {
                     sh 'docker run --rm -i --entrypoint sh qrcoolimage -c "sh ./testEntrypoint.sh"'   
@@ -108,7 +123,12 @@ pipeline {
         }
 
         stage("Deploy Backend") {
-            when { changeset "backend/**" }
+            when { 
+                anyOf {
+                    changeset "backend/**"
+                    changeset "Jenkinsfile"
+                }
+            }
             steps {
                 dir('backend') {
                     sh 'npm run save:image'
