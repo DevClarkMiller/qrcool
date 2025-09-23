@@ -38,18 +38,8 @@ pipeline {
             steps {
                 dir('frontend/QrCool') {
                     sh 'NODE_ENV=development npm ci'
-                    withCredentials([file(credentialsId: 'qrcool-frontend-staging-env', variable: 'ENV_FILE')]) {
-                        script {
-                            def secretContent = readFile(env.ENV_FILE)
-                            writeFile file: '.env.staging', text: secretContent
-                        }
-                    }
-                    withCredentials([file(credentialsId: 'qrcool-frontend-production-env', variable: 'ENV_FILE')]) {
-                        script {
-                            def secretContent = readFile(env.ENV_FILE)
-                            writeFile file: '.env.production', text: secretContent
-                        }
-                    }
+                    loadEnvFile('qrcool', 'frontend', 'staging')
+                    loadEnvFile('qrcool', 'frontend', 'production')
                 }
             }
         }
@@ -66,14 +56,8 @@ pipeline {
                 dir('backend') {
                     sh "npm install"
                     
-                    loadEnvFile('qrcool', 'backend', 'development', '.env.development')
-
-                    withCredentials([file(credentialsId: 'qrcool-backend-production-env', variable: 'ENV_FILE')]) {
-                        script {
-                            def secretContent = readFile(env.ENV_FILE)
-                            writeFile file: '.env.production', text: secretContent
-                        }
-                    }
+                    loadEnvFile('qrcool', 'backend', 'development')
+                    loadEnvFile('qrcool', 'backend', 'production')
                 }
             }
         }
