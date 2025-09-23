@@ -11,16 +11,13 @@ pipeline {
             defaultValue: false,
             description: 'Force frontend stage to run even if no changes detected'
         )
-    }
-
-    parameters {
-        booleanParam(
+         booleanParam(
             name: 'FORCE_BACKEND',
             defaultValue: false,
             description: 'Force backend stage to run even if no changes detected'
         )
     }
-
+    
     stages {
         stage("Checkout") {
             steps {
