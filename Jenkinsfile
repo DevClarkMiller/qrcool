@@ -13,7 +13,7 @@ pipeline {
             defaultValue: false,
             description: 'Force frontend stage to run even if no changes detected'
         )
-         booleanParam(
+        booleanParam(
             name: 'FORCE_BACKEND',
             defaultValue: false,
             description: 'Force backend stage to run even if no changes detected'
@@ -102,7 +102,7 @@ pipeline {
             }
             steps {
                 dir('backend') {
-                    sh 'docker run --rm -i --entrypoint sh qrcoolimage -c "sh ./testEntrypoint.sh"'   
+                    runAndDeleteContainer('qrcoolimage', './testEntrypoint.sh')
                 }
             }
         }
@@ -117,7 +117,7 @@ pipeline {
             }
             steps {
                 dir('frontend/QrCool') {
-                    sh 'scp -r dist/* clark@clarkmiller.ca:/var/www/qrcool.ca/html'
+                    scpBuildFilesToWWW("clark", "clarkmiller.ca", "qrcool.ca")
                 }
             }
         }
