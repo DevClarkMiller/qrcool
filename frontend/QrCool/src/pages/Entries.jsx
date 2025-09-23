@@ -41,7 +41,7 @@ const Entry = ({entry}) =>{
         setShowQrModal(true);
         const qrVal = `${getEndpoint()}/${account.Username}/${entry.Name}`;
         setQrValue({qr: qrVal, entry: entry});
-    } 
+    }
 
     const entryViewCount = useEntryViewCount(entry.Id, entryController);
 
