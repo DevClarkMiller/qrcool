@@ -66,12 +66,7 @@ pipeline {
                 dir('backend') {
                     sh "npm install"
                     
-                    withCredentials([file(credentialsId: 'qrcool-backend-development-env', variable: 'ENV_FILE')]) {
-                        script {
-                            def secretContent = readFile(env.ENV_FILE)
-                            writeFile file: '.env.development', text: secretContent
-                        }
-                    }
+                    loadEnvFile('qrcool', 'backend', 'development', '.env.development')
 
                     withCredentials([file(credentialsId: 'qrcool-backend-production-env', variable: 'ENV_FILE')]) {
                         script {
