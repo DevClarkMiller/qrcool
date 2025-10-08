@@ -8,7 +8,7 @@ export default class FileManager{
         if (!minioClient){ // Construct a new client if one wasn't provided
             this.client = new Minio.Client({
                 endPoint: process.env.MINIO_ENDPOINT as string,
-                port: 9000,
+                port: 443,
                 useSSL:  process.env.MINIO_USE_SSL as string === 'true',
                 accessKey: process.env.MINIO_ACCESS_KEY as string,
                 secretKey: process.env.MINIO_SECRET_KEY as string
