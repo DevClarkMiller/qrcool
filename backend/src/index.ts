@@ -48,4 +48,8 @@ app.use('/api/content', contentRouter)
 app.use('/api/entryView', entryViewRouter);
 app.use('/', mainRouter);
 
+(async () => {
+    console.log(`There are ${await AppContext.DB.account.count()} accounts in the database`);
+})();
+
 AppContext.StartServer(port, process.env.SERVER_URL);
