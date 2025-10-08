@@ -8,6 +8,7 @@ export async function accountLogin(req: Request, res: Response){
     try{
         const accVm: any = req.body; // Catches any account form
         res.clearCookie("token"); // Clear out any old tokens
+        console.log(`${accVm?.Email} | ${accVm?.Username} is requesting to login`);
         await login(res, accVm?.Email, accVm?.Username, accVm?.Password);
 
         if (accVm?.Username && accVm?.Password)
