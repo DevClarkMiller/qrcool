@@ -116,15 +116,15 @@ pipeline {
                 }
             }
             steps {
-                dir('frontend/QrCool') {
-                    withCredentials([
+                withCredentials([
                     string(credentialsId: 'vps-username', variable: 'USERNAME'),
                     string(credentialsId: 'vps-domain', variable: 'DOMAIN')
-                    ]) {
+                ]) {
+                    dir('frontend/QrCool') {
                         scpBuildFilesToWWW(USERNAME, DOMAIN, 'qrcool.ca')
-                        updateNginxConf(USERNAME, DOMAIN, 'qrcool.ca')
-                        certify(USERNAME, DOMAIN, 'site.qrcool.ca')
                     }
+                    updateNginxConf(USERNAME, DOMAIN, 'qrcool.ca')
+                    certify(USERNAME, DOMAIN, 'site.qrcool.ca')
                 }
             }
         }
