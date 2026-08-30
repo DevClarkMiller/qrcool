@@ -41,8 +41,8 @@ async function returnByContentType(res: Response, entryContent: EntryContent, co
 // The main route of the webapp
 mainRouter.get('/:username/:entryName', async (req: Request, res: Response) =>{
     try{
-        const username: string | null = req.params.username;
-        const entryName: string | null = req.params.entryName;
+        const username: string = Array.isArray(req.params.username) ? req.params.username[0] : req.params.username;
+        const entryName: string = Array.isArray(req.params.entryName) ? req.params.entryName[0] : req.params.entryName;
 
         const accDao = new AccountDao();
         const entDao = new EntryDao();

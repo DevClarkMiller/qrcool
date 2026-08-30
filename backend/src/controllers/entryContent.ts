@@ -120,7 +120,7 @@ export async function postFile(req: Request, res: Response){
         const files: FileArray | null | undefined = req.files;
         const entryId: number = parseInt(req.params.entryId as string);
         const contentTypeId: number = parseInt(req.params.contentTypeId as string);
-        const name: string | null = req.params.name;
+        const name: string | string[] | null = req.params.name;
 
         if (!files)
             throw new RequestError(400, "No file given");
@@ -145,7 +145,7 @@ export async function postFile(req: Request, res: Response){
 
         // Here is the result of the above work, we can use the buffer to upload to minio
         const file: UploadedFile = files[fileNames[0]] as UploadedFile;
-        await ecDao.addFileUpload(entry, name, file, req.account, contentTypeId);
+        await ecDao.addFileUpload(entry, name as string, file, req.account, contentTypeId);
 
         const ecs: EntryContent[] = await ecDao.getByEntry(entryId);
         if (ecs.length === 1)
@@ -186,7 +186,7 @@ export async function getAnonymous(req: Request, res: Response){
         // Check if it's a file
         const contentType: ContentType = await contTypeDao.getById(content.ContentTypeId);
 
-        await evDao.add(entryContent.EntryId, entryContent.ContentId, location);
+        await evDao.add(entryContent.EntryId, entryContent.ContentId, location!);
 
         if (contentType.Name === "Text")
             res.send(content.Text);
