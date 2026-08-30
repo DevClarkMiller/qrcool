@@ -17,7 +17,7 @@ pipeline {
         DOMAIN = credentials('vps-domain')
         JENKINS = 'Jenkinsfile'
         CLIENT_DIR = 'frontend'
-        API_DIR = ''
+        API_DIR = 'backend'
     }
 
     stages {
