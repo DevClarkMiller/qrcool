@@ -95,7 +95,7 @@ pipeline {
             }
             
             steps {
-                dir(NGINX_CONF_PATH) {
+                dir('ci') {
                     updateNginxConf(USERNAME, DOMAIN, CLIENT_HOSTNAME)
                 }
             }
