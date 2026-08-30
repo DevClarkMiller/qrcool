@@ -24,7 +24,7 @@ pipeline {
         PACKAGE_LOCK = 'frontend/package-lock.json'
         JENKINS = 'frontend/Jenkinsfile'
         CHANGE_SRC = 'frontend/src/**'
-        NGINX_CONF_PATH = 'nginx.conf'
+        NGINX_CONF_PATH = 'ci/nginx.conf'
     }
 
     stages {
@@ -82,8 +82,6 @@ pipeline {
                     dir('frontend') {
                         scpBuildFilesToWWW(USERNAME, DOMAIN, 'qrcool.ca')
                     }
-                    updateNginxConf(USERNAME, DOMAIN, 'qrcool.ca')
-                    certify(USERNAME, DOMAIN, 'site.qrcool.ca')
                 }
             }
         }
@@ -97,7 +95,9 @@ pipeline {
             }
             
             steps {
-                updateNginxConf(USERNAME, DOMAIN, CLIENT_HOSTNAME)
+                dir(NGINX_CONF_PATH) {
+                    updateNginxConf(USERNAME, DOMAIN, CLIENT_HOSTNAME)
+                }
             }
         }
     }
