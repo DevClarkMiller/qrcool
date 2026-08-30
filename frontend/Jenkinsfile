@@ -90,6 +90,7 @@ pipeline {
             when {
                 anyOf {
                     changeset NGINX_CONF_PATH
+                    changeset JENKINS
                     expression { return params.FORCE_FRONTEND || params.All }
                 }
             }
