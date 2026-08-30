@@ -69,7 +69,16 @@ cd qrcool
 cd backend
 npm install
 
-# 3. Run the project
+# 3. Configure database connection
+# Add DB_URL to a local .env file, for example:
+# DATABASE_URL="sqlserver://..."
+
+# 4. Apply the Prisma schema as the source of truth
+npm run prisma:push
+# or for migrations:
+# npm run prisma:migrate:dev
+
+# 5. Run the project
 npm run start:dev
 ```
 

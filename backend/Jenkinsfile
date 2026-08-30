@@ -50,6 +50,26 @@ pipeline {
             }
         }
 
+        stage("Prisma Migrate") {
+            when {
+                anyOf {
+                    changeset CHANGE_SRC
+                    changeset JENKINS
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
+                    changeset PRISMA
+                    expression { return params.FORCE_BACKEND || params.All }
+                }
+            }
+            steps {
+                dir('backend') {
+                    sh 'npx prisma generate'
+                    sh 'npx prisma migrate deploy'
+                    sh 'npm run prisma:seed'
+                }
+            }
+        }
+
         stage("Build") {
             when { 
                 anyOf {
