@@ -98,6 +98,7 @@ pipeline {
             steps {
                 dir('ci') {
                     updateNginxConf(USERNAME, DOMAIN, CLIENT_HOSTNAME)
+                    certify(USERNAME, DOMAIN, 'site.qrcool.ca')
                 }
             }
         }
