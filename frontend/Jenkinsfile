@@ -24,7 +24,7 @@ pipeline {
         PACKAGE_LOCK = 'frontend/package-lock.json'
         JENKINS = 'frontend/Jenkinsfile'
         CHANGE_SRC = 'frontend/src/**'
-        NGINX_CONF_PATH = 'ci/nginx.conf'
+        NGINX_CONF_PATH = 'nginx.conf'
     }
 
     stages {
@@ -97,9 +97,7 @@ pipeline {
             }
             
             steps {
-                dir('ci') {
-                    updateNginxConf(USERNAME, DOMAIN, CLIENT_HOSTNAME)
-                }
+                updateNginxConf(USERNAME, DOMAIN, CLIENT_HOSTNAME)
             }
         }
     }
