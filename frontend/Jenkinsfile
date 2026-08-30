@@ -22,7 +22,7 @@ pipeline {
         DOMAIN = credentials('vps-domain')
         PACKAGE = 'frontend/package.json'
         PACKAGE_LOCK = 'frontend/package-lock.json'
-        JENKINS = 'Jenkinsfile'
+        JENKINS = 'frontend/Jenkinsfile'
         CHANGE_SRC = 'frontend/src/**'
         NGINX_CONF_PATH = 'ci/nginx.conf'
     }

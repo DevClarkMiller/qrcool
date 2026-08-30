@@ -22,7 +22,7 @@ pipeline {
         DOMAIN = credentials('vps-domain')
         PACKAGE = 'backend/package.json'
         PACKAGE_LOCK = 'backend/package-lock.json'
-        JENKINS = 'Jenkinsfile'
+        JENKINS = 'backend/Jenkinsfile'
         CHANGE_SRC = 'backend/src/**'
         PRISMA = "backend/prisma/**"
         HOST = "sys1.clarkmiller.ca"
