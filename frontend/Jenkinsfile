@@ -95,9 +95,12 @@ pipeline {
                     expression { return params.FORCE_FRONTEND || params.All }
                 }
             }
+
+            dir (NGINX_CONF_PATH) {
             
-            steps {
-                updateNginxConf(USERNAME, DOMAIN, CLIENT_HOSTNAME, NGINX_CONF_PATH)
+                steps {
+                    updateNginxConf(USERNAME, DOMAIN, CLIENT_HOSTNAME)
+                }
             }
         }
     }
