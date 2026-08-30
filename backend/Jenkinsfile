@@ -1,0 +1,106 @@
+@Library('pipeline-lib') _
+
+pipeline {
+    agent any
+
+    parameters {
+        booleanParam(
+            name: 'All',
+            defaultValue: false,
+            description: 'Runs all even if there are no changes'
+        )
+
+        booleanParam(
+            name: 'FORCE_BACKEND',
+            defaultValue: false,
+            description: 'Force backend stage to run even if no changes detected'
+        )
+    }
+
+    environment {
+        USERNAME = credentials('vps-username')
+        DOMAIN = credentials('vps-domain')
+        PACKAGE = 'backend/package.json'
+        PACKAGE_LOCK = 'backend/package-lock.json'
+        JENKINS = 'Jenkinsfile'
+        CHANGE_SRC = 'backend/src/**'
+        PRISMA = "backend/prisma/**"
+        HOST = "sys1.clarkmiller.ca"
+    }
+
+    stages {
+        stage("Install Dependencies") {
+            when { 
+                anyOf {
+                    changeset CHANGE_SRC
+                    changeset JENKINS
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
+                    changeset PRISMA
+                    expression { return params.FORCE_BACKEND || params.All }
+                }
+            }
+            steps {
+                dir('backend') {
+                    sh "npm install"
+                    
+                    loadEnvFile('qrcool', 'backend', 'development')
+                    loadEnvFile('qrcool', 'backend', 'production')
+                }
+            }
+        }
+
+        stage("Build") {
+            when { 
+                anyOf {
+                    changeset CHANGE_SRC
+                    changeset JENKINS
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
+                    changeset PRISMA
+                    expression { return params.FORCE_BACKEND || params.All }
+                }
+            }
+            steps {
+                dir('backend') {
+                    sh 'npm run build:image'
+                }
+            }
+        }
+
+        stage("Test") {
+            when { 
+                anyOf {
+                    changeset CHANGE_SRC
+                    changeset JENKINS
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
+                    changeset PRISMA
+                    expression { return params.FORCE_BACKEND || params.All }
+                }
+            }
+            steps {
+                dir('backend') {
+                    runAndDeleteContainer('qrcoolimage', './testEntrypoint.sh')
+                }
+            }
+        }
+
+        stage("Deploy") {
+            when { 
+                anyOf {
+                    changeset CHANGE_SRC
+                    changeset JENKINS
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
+                    changeset PRISMA
+                    expression { return params.FORCE_BACKEND || params.All }
+                }
+            }
+            steps {
+                // TODO: Trigger docker image download from ecr type thing but open source on my server :)
+                sh "ssh ${HOST} \"docker compose stop qrcool ; docker compose rm -f qrcool; docker compose up -d qrcool\""
+            }
+        }
+    }
+}

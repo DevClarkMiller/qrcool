@@ -1,0 +1,104 @@
+@Library('pipeline-lib') _
+
+pipeline {
+    agent any
+
+    parameters {
+        booleanParam(
+            name: 'All',
+            defaultValue: false,
+            description: 'Runs all even if there are no changes'
+        )
+        booleanParam(
+            name: 'FORCE_FRONTEND',
+            defaultValue: false,
+            description: 'Force frontend stage to run even if no changes detected'
+        )
+    }
+
+    environment {
+        CLIENT_HOSTNAME = 'qrcool.ca'
+        USERNAME = credentials('vps-username')
+        DOMAIN = credentials('vps-domain')
+        PACKAGE = 'frontend/package.json'
+        PACKAGE_LOCK = 'frontend/package-lock.json'
+        JENKINS = 'Jenkinsfile'
+        CHANGE_SRC = 'frontend/src/**'
+        NGINX_CONF_PATH = 'ci/nginx.conf'
+    }
+
+    stages {
+        stage("Install Dependencies") {
+            when { 
+                anyOf {
+                    changeset CHANGE_SRC
+                    changeset JENKINS
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
+                    expression { return params.FORCE_FRONTEND || params.All }
+                }
+            }
+            steps {
+                dir('frontend') {
+                    sh 'NODE_ENV=development npm ci'
+                    loadEnvFile('qrcool', 'frontend', 'staging')
+                    loadEnvFile('qrcool', 'frontend', 'production')
+                }
+            }
+        }
+
+        stage ("Build") {
+            when { 
+                anyOf {
+                    changeset CHANGE_SRC
+                    changeset JENKINS
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
+                    expression { return params.FORCE_FRONTEND || params.All }
+                }
+            }
+            steps {
+                dir('frontend') {
+                    sh "npm run build:prod"
+                }
+            }
+        }
+
+        stage("Deploy") {
+            when { 
+                anyOf {
+                    changeset CHANGE_SRC
+                    changeset JENKINS
+                    changeset PACKAGE
+                    changeset PACKAGE_LOCK
+                    expression { return params.FORCE_FRONTEND || params.All }
+                }
+            }
+            steps {
+                withCredentials([
+                    string(credentialsId: 'vps-username', variable: 'USERNAME'),
+                    string(credentialsId: 'vps-domain', variable: 'DOMAIN')
+                ]) {
+                    dir('frontend') {
+                        scpBuildFilesToWWW(USERNAME, DOMAIN, 'qrcool.ca')
+                    }
+                    updateNginxConf(USERNAME, DOMAIN, 'qrcool.ca')
+                    certify(USERNAME, DOMAIN, 'site.qrcool.ca')
+                }
+            }
+        }
+
+        stage('Update Nginx') {
+            when {
+                anyOf {
+                    changeset NGINX_CONF_PATH
+                    expression { return params.FORCE_FRONTEND || params.All }
+                }
+            }
+            
+            steps {
+                updateNginxConf(USERNAME, DOMAIN, CLIENT_HOSTNAME, NGINX_CONF_PATH)
+            }
+        }
+    }
+}

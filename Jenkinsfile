@@ -3,149 +3,58 @@
 pipeline {
     agent any
 
-    environment {
-        NODE_ENV = 'production'
-    }
-
     parameters {
         booleanParam(
-            name: 'FORCE_FRONTEND',
+            name: 'All',
             defaultValue: false,
-            description: 'Force frontend stage to run even if no changes detected'
+            description: 'Runs all even if there are no changes'
         )
-        booleanParam(
-            name: 'FORCE_BACKEND',
-            defaultValue: false,
-            description: 'Force backend stage to run even if no changes detected'
-        )
+    }
+
+    environment {
+        NODE_ENV = 'production'
+        USERNAME = credentials('vps-username')
+        DOMAIN = credentials('vps-domain')
+        JENKINS = 'Jenkinsfile'
+        CLIENT_DIR = 'frontend'
+        API_DIR = ''
     }
 
     stages {
-        stage("Checkout") {
+        stage('Determine Changes and run pipelines') {
             steps {
                 checkout scm
-            }
-        }
 
-        stage("Install Dependencies Frontend") {
-            when { 
-                anyOf {
-                    changeset "frontend/**"
-                    changeset "Jenkinsfile"
-                    expression { return params.FORCE_FRONTEND }
-                }
-            }
-            steps {
-                dir('frontend/QrCool') {
-                    sh 'NODE_ENV=development npm ci'
-                    loadEnvFile('qrcool', 'frontend', 'staging')
-                    loadEnvFile('qrcool', 'frontend', 'production')
-                }
-            }
-        }
+                script {
+                    def services = [
+                        'qrcool.client': CLIENT_DIR,
+                        'qrcool.api': API_DIR,
+                    ]
 
-        stage("Install Dependencies Backend") {
-            when { 
-                anyOf {
-                    changeset "backend/**"
-                    changeset "Jenkinsfile"
-                    expression { return params.FORCE_BACKEND }
-                }
-            }
-            steps {
-                dir('backend') {
-                    sh "npm install"
-                    
-                    loadEnvFile('qrcool', 'backend', 'development')
-                    loadEnvFile('qrcool', 'backend', 'production')
-                }
-            }
-        }
-
-        stage ("Build Frontend") {
-            when { 
-                anyOf {
-                    changeset "frontend/**"
-                    changeset "Jenkinsfile"
-                    expression { return params.FORCE_FRONTEND }
-                }
-            }
-            steps {
-                dir('frontend/QrCool') {
-                    sh "npm run build:prod"
-                }
-            }
-        }
-
-        stage("Build Backend") {
-            when { 
-                anyOf {
-                    changeset "backend/**"
-                    changeset "Jenkinsfile"
-                    expression { return params.FORCE_BACKEND }
-                }
-            }
-            steps {
-                dir('backend') {
-                    sh 'npm run build:image'
-                }
-            }
-        }
-
-        stage("Test") {
-            when { 
-                anyOf {
-                    changeset "backend/**"
-                    changeset "Jenkinsfile"
-                    expression { return params.FORCE_BACKEND }
-                }
-            }
-            steps {
-                dir('backend') {
-                    runAndDeleteContainer('qrcoolimage', './testEntrypoint.sh')
-                }
-            }
-        }
-
-        stage("Deploy Frontend") {
-            when { 
-                anyOf {
-                    changeset "frontend/**"
-                    changeset "Jenkinsfile"
-                    expression { return params.FORCE_FRONTEND }
-                }
-            }
-            steps {
-                withCredentials([
-                    string(credentialsId: 'vps-username', variable: 'USERNAME'),
-                    string(credentialsId: 'vps-domain', variable: 'DOMAIN')
-                ]) {
-                    dir('frontend/QrCool') {
-                        scpBuildFilesToWWW(USERNAME, DOMAIN, 'qrcool.ca')
+                    def toTrigger = []
+                    services.each { service, path ->
+                        if (params.FORCE_RUN || checkMicroservice(path)) {
+                            echo "Changes detected in ${service}, will trigger pipelines."
+                            toTrigger << service // Add to the list
+                        } else {
+                            echo "No changes in ${service}, skipping."
+                        }
                     }
-                    updateNginxConf(USERNAME, DOMAIN, 'qrcool.ca')
-                    certify(USERNAME, DOMAIN, 'site.qrcool.ca')
-                }
-            }
-        }
 
-        stage("Deploy Backend") {
-            when { 
-                anyOf {
-                    changeset "backend/**"
-                    changeset "Jenkinsfile"
-                    expression { return params.FORCE_BACKEND }
+                    if (toTrigger.isEmpty()) {
+                        echo "No services changed. Nothing to trigger."
+                    }
+					
+                    toTrigger.each { service -> 
+                        echo "Triggering ${service}..."
+                        build job: service,
+                                parameters: [
+                                    booleanParam(name: 'All', value: params.All)
+                                ],
+                                wait: true // set false for async
+                        echo "${service} finished."
+                    }
                 }
-            }
-            steps {
-                // We don't need to transfer over the tar file since the node is on the same machine
-                // dir('backend') {
-                //     sh 'npm run save:image'
-                //     sh 'scp qrcoolimage.tar miller@sys1.clarkmiller.ca:/home/miller'
-                //     sh 'ssh sys1.clarkmiller.ca "docker load -i qrcoolimage.tar"'
-                //     sh 'ssh sys1.clarkmiller.ca "docker compose stop qrcool ; docker compose rm -f qrcool; docker compose up -d qrcool"'
-                // }
-                sh 'ssh sys1.clarkmiller.ca "docker compose stop qrcool ; docker compose rm -f qrcool; docker compose up -d qrcool"'
             }
         }
     }
