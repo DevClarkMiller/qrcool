@@ -4,7 +4,7 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)]()
-[![Build Status](https://img.shields.io/github/actions/workflow/status/USERNAME/REPO/ci.yml)](https://github.com/USERNAME/REPO/actions)
+<!-- [![Build Status](https://img.shields.io/github/actions/workflow/status/USERNAME/REPO/ci.yml)](https://github.com/USERNAME/REPO/actions) -->
 
 ---
 
