@@ -1,0 +1,16 @@
+services:
+  qrcool:
+    image: ghcr.io/devclarkmiller/qrcool:${IMAGE_TAG:-latest}
+    pull_policy: always
+    container_name: qrcool
+    restart: unless-stopped
+    env_file:
+      - .env
+    expose:
+      - "5000"
+    networks:
+      - web
+
+networks:
+  web:
+    external: true
