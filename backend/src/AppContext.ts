@@ -42,6 +42,8 @@ export class AppContext {
     public static get BucketName(): string { return this.Instance._BUCKET_NAME; }
 
     public static get DB(): PrismaClient { return this.Instance._db; }
+    // Test-only seam: lets tests swap in an in-memory PrismaClient (e.g. prismock) before DAOs are constructed.
+    public static set DB(db: PrismaClient) { this.Instance._db = db; }
 
     public static get FileManager(): FileManager { return this.Instance._fileManager; }
 };

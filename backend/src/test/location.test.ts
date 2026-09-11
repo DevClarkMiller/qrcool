@@ -9,7 +9,7 @@ const coordsTranslator = new CoordsTranslator(process.env.GEOAPIFY_KEY as string
 
 describe("Gets a location", function(){
     it("should return a LocationPlace", async () =>{
-        const res: LocationPlace = await coordsTranslator.processOne({
+        const res: LocationPlace | null = await coordsTranslator.processOne({
             Latitude: 42.991616,
             Longitude: -81.3039616
         });

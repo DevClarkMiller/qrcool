@@ -6,11 +6,12 @@ import fs from 'fs';
 loadEnv();
 
 describe("Create PDF", () =>{
-    it("should create a pdf with a header, and a table", () =>{
+    it("should create a pdf with a header, and a table", async () =>{
         const filePath = 'test.pdf';
         const doc = new PDFDocument();
+        const stream = fs.createWriteStream(filePath);
 
-        doc.pipe(fs.createWriteStream(filePath));
+        doc.pipe(stream);
 
         const table: any = {
             title: "Entry Views",
@@ -24,12 +25,13 @@ describe("Create PDF", () =>{
         doc.table(table, {});
         doc.end();
 
-        expect(fs.existsSync(filePath)).toBe(true);
+        await new Promise<void>((resolve, reject) => {
+            stream.on('finish', resolve);
+            stream.on('error', reject);
+        });
 
-        setTimeout(() => {
-            if (fs.existsSync(filePath)) {
-                fs.unlinkSync(filePath);
-            }
-        }, 100);
+        expect(fs.existsSync(filePath)).toBeTruthy();
+
+        fs.unlinkSync(filePath);
     });
 });
