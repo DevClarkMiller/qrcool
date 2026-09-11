@@ -11,6 +11,7 @@
     "prisma:generate": "dotenv -e .env.development -- npx prisma generate",
     "prisma:push": "dotenv -e .env.development -- npx prisma db push",
     "prisma:migrate:dev": "dotenv -e .env.development -- npx prisma migrate dev --name init",
+    "prisma:migrate:deploy:dev": "dotenv -e .env.development -- npx prisma migrate deploy",
     "prisma:migrate:prod": "dotenv -e .env.production -- npx prisma migrate deploy",
     "prisma:seed": "dotenv -e .env.development -- npx tsx prisma/seed.ts",
     "prisma:studio": "npx prisma studio",

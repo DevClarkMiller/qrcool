@@ -63,9 +63,9 @@ pipeline {
             }
             steps {
                 dir('backend') {
-                    sh 'NODE_ENV=development npx prisma generate'
-                    sh 'NODE_ENV=development npx prisma migrate deploy'
-                    sh 'NODE_ENV=development npm run prisma:seed'
+                    sh 'npm run prisma:generate'
+                    sh 'npm run prisma:migrate:deploy:dev'
+                    sh 'npm run prisma:seed'
                 }
             }
         }
