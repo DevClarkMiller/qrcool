@@ -1,15 +1,22 @@
-FROM node:22-alpine
-
-WORKDIR /
-COPY testEntrypoint.sh ./
-RUN chmod +x testEntrypoint.sh
+FROM node:22-alpine AS base
 
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json first for caching dependencies
 COPY package*.json ./
 
-# Install dependencies
+# Stage used by CI to run the test suite (needs devDependencies e.g. jest, typescript)
+FROM base AS test
+
+RUN npm ci
+
+COPY . .
+
+RUN npm run prisma:generate
+
+# Stage used to build and ship the runtime image
+FROM base AS production
+
 RUN npm ci --omit=dev
 
 COPY . .
