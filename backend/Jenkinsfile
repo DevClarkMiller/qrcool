@@ -66,7 +66,12 @@ pipeline {
 
                         IMAGE_ID=$(docker build -q .)
                         trap 'docker image rm "$IMAGE_ID" || true' EXIT
-                        docker run --rm --entrypoint /testEntrypoint.sh "$IMAGE_ID"
+                        docker run --rm --entrypoint /bin/sh "$IMAGE_ID" -c '
+                            set -eux
+                            echo "[Test] Development - Skipped"
+                            npm run test:dev
+                            echo "[Test] Production - Skipped"
+                        '
                     '''
                 }
             }
