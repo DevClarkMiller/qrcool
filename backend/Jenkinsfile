@@ -52,6 +52,23 @@ pipeline {
             }
         }
 
+        // stage("Vulnerability Check") {
+        //     when {
+        //         anyOf {
+        //             changeset CHANGE_SRC
+        //             changeset JENKINS
+        //             changeset PACKAGE
+        //             changeset PACKAGE_LOCK
+        //             expression { return params.Force }
+        //         }
+        //     }
+        //     steps {
+        //         dir('frontend') {
+        //             sh 'npm audit --audit-level=high'
+        //         }
+        //     }
+        // }
+
         stage("Prisma Migrate") {
             when {
                 anyOf {
