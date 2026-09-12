@@ -87,6 +87,7 @@ pipeline {
             when {
                 anyOf {
                     changeset PRISMA
+                    changeset JENKINS
                     expression { return params.Force }
                 }
             }
@@ -170,6 +171,7 @@ pipeline {
                         mkdir -p "$DEPLOY_DIR"
                         cp .env.production "$DEPLOY_DIR/.env"
                         chmod 600 "$DEPLOY_DIR/.env"
+                        rm -f "$DEPLOY_DIR/.env"
                         cp docker-compose.yml "$DEPLOY_DIR/docker-compose.yml"
                     '''
                 }
