@@ -1,11 +1,15 @@
 import { PrismaClient } from '@prisma/client';
 import { PrismockClient } from 'prismock';
 import { AppContext } from 'src/AppContext';
+import { mockFileManager } from './mockFileManager';
 
 export const seed = async () => {
     // Swap in an in-memory Prisma client before any DAOs are constructed,
     // since DAOs capture the model delegate off AppContext.DB at construction time.
     AppContext.DB = new PrismockClient() as unknown as PrismaClient;
+
+    // Swap in a FileManager backed by a fake Minio client so tests never hit a real Minio endpoint.
+    AppContext.FileManager = mockFileManager;
 
     const seededAccount = await AppContext.DB.account.create({
         data: {

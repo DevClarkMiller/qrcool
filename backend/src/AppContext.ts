@@ -17,11 +17,11 @@ export class AppContext {
     private  _BUCKET_NAME: string;
 
     private constructor() {
+        loadEnv();
+
         this._db = new PrismaClient();
         this._fileManager = new FileManager();
         this._BUCKET_NAME = process.env.MINIO_BUCKET as string;
-        
-        loadEnv();
     }
 
 
@@ -46,4 +46,6 @@ export class AppContext {
     public static set DB(db: PrismaClient) { this.Instance._db = db; }
 
     public static get FileManager(): FileManager { return this.Instance._fileManager; }
+    // Test-only seam: lets tests swap in a mock FileManager (e.g. backed by a fake Minio client) before DAOs are constructed.
+    public static set FileManager(fm: FileManager) { this.Instance._fileManager = fm; }
 };

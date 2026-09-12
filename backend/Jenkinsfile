@@ -22,6 +22,7 @@ pipeline {
         IMAGE_TAG       = "${env.BUILD_NUMBER}"
         GHCR_CREDS_ID   = 'portfolio-pipeline'
         DEPLOY_DIR      = '/srv/qrcool'
+        ENV_ID          = 'qrcool-backend-production-env'
     }
 
     stages {
@@ -61,17 +62,20 @@ pipeline {
             }
             steps {
                 dir('backend') {
-                    sh '''
-                        set -eux
-
-                        IMAGE_ID=$(docker build -q --target test .)
-                        trap 'docker image rm "$IMAGE_ID" || true' EXIT
-                        docker run --rm --entrypoint /bin/sh "$IMAGE_ID" -c '
+                    withCredentials([file(credentialsId: ENV_ID, variable: 'ENV_FILE')]) {
+                        sh '''
                             set -eux
-                            echo "[Test] Development"
-                            npm run test:dev
-                        '
-                    '''
+
+                            cp "$ENV_FILE" .env
+
+                            IMAGE_ID=$(docker build -q --target test .)
+                            docker run --rm --env-file .env "$IMAGE_ID" sh -c '
+                                set -eux
+                                echo "[Test] Development"
+                                npm run test:dev
+                            '
+                        '''
+                    }
                 }
             }
         }
@@ -88,6 +92,23 @@ pipeline {
             }
             steps {
                 dir('backend') {
+                    withCredentials([file(credentialsId: ENV_ID, variable: 'ENV_FILE')]) {
+                        sh '''
+                            set -eux
+
+                            cp "$ENV_FILE" .env.test
+
+                            IMAGE_ID=$(docker build -q .)
+                            trap 'rm -f .env; docker image rm "$IMAGE_ID" || true' EXIT
+
+                            docker run --rm --env-file .env "$IMAGE_ID" sh -c '
+                                set -eux
+                                npm run prisma:generate
+                                npm run prisma:migrate:deploy:dev
+                                npm run prisma:seed
+                            '
+                        '''
+                    }
                     sh '''
                         set -eux
 
