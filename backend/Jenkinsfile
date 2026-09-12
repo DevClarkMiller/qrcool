@@ -107,7 +107,7 @@ pipeline {
                             IMAGE_ID=$(docker build -q .)
                             trap 'rm -f .env; docker image rm "$IMAGE_ID" || true' EXIT
 
-                            docker run --rm --env-file .env "$IMAGE_ID" sh -c '
+                            docker run --rm --network web --env-file .env "$IMAGE_ID" sh -c '
                                 set -eux
                                 npm run prisma:generate
                                 npm run prisma:migrate:deploy:dev
@@ -115,18 +115,6 @@ pipeline {
                             '
                         '''
                     }
-                    sh '''
-                        set -eux
-
-                        IMAGE_ID=$(docker build -q .)
-                        trap 'docker image rm "$IMAGE_ID" || true' EXIT
-                        docker run --rm --entrypoint /bin/sh "$IMAGE_ID" -c '
-                            set -eux
-                            npm run prisma:generate
-                            npm run prisma:migrate:deploy:dev
-                            npm run prisma:seed
-                        '
-                    '''
                 }
             }
         }
