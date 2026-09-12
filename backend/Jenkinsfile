@@ -66,7 +66,10 @@ pipeline {
                         sh '''
                             set -eux
 
+                            rm -f .env
                             cp "$ENV_FILE" .env
+                            chmod 600 .env
+                            trap 'rm -f .env' EXIT
 
                             IMAGE_ID=$(docker build -q --target test .)
                             docker run --rm --env-file .env "$IMAGE_ID" sh -c '
@@ -96,7 +99,10 @@ pipeline {
                         sh '''
                             set -eux
 
-                            cp "$ENV_FILE" .env.test
+                            rm -f .env
+                            cp "$ENV_FILE" .env
+                            chmod 600 .env
+                            trap 'rm -f .env' EXIT
 
                             IMAGE_ID=$(docker build -q .)
                             trap 'rm -f .env; docker image rm "$IMAGE_ID" || true' EXIT
