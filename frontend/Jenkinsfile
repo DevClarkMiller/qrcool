@@ -116,7 +116,7 @@ pipeline {
             steps {
                 sh "cp ci/nginx.conf ${NGINX_BASE_PATH}/sites-available/${PROD_DOMAIN}"
                 sh "cd /opt/nginx/sites-enabled"
-                sh "ln -sfn ..sites-available/${PROD_DOMAIN} ${PROD_DOMAIN}"
+                sh "ln -sfn ../sites-available/${PROD_DOMAIN} ${PROD_DOMAIN}"
                 sh "docker exec nginx nginx -s reload"
             }
         }
