@@ -56,4 +56,7 @@ app.use('/', mainRouter);
     }
 })();
 
-AppContext.StartServer(port, process.env.SERVER_URL);
+if (process.env.SERVER_URL)
+    AppContext.StartServer(port, process.env.SERVER_URL);
+else
+    console.error("Server URL invalid");

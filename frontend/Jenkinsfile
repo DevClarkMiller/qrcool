@@ -17,8 +17,7 @@ pipeline {
         JENKINS            = 'frontend/Jenkinsfile'
         CHANGE_SRC         = 'frontend/src/**'
         NGINX_CONF_PATH    = 'ci/nginx.conf'
-        PROD_DOMAIN        = 'qrcool.ca'
-        STATIC_SITE_DOMAIN = 'site.qrcool.ca'
+        PROD_DOMAIN        = 'site.qrcool.ca'
     }
 
     stages {
@@ -94,7 +93,7 @@ pipeline {
             }
             steps {
                 script {
-                    env.WWW_PATH = "/var/www/${STATIC_SITE_DOMAIN}/html"
+                    env.WWW_PATH = "/var/www/${PROD_DOMAIN}/html"
                 }
                 dir('frontend') {
                     sh "mkdir -p ${env.WWW_PATH}"
@@ -115,7 +114,7 @@ pipeline {
                 }
             }
             steps {
-                sh "cp ci/nginx.conf ${NGINX_BASE_PATH}/sites-available/${PROD_DOMAIN}"
+                sh "cp ci/nginx.conf ${NGINX_BASE_PATH}/sites-available/${}"
                 sh "ln -sfn ${NGINX_BASE_PATH}/sites-available/${PROD_DOMAIN} ${NGINX_BASE_PATH}/sites-enabled/${PROD_DOMAIN}"
                 sh "docker exec nginx nginx -s reload"
             }
