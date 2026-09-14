@@ -47,6 +47,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Write production .env and compose file
+        working-directory: backend
+        run: |
+          set -eu
+          mkdir -p $DEPLOY_DIR
+          umask 077
+          printf '%s' "$API_ENV_CONTENT" > $DEPLOY_DIR/.env
+          chmod 600 $DEPLOY_DIR/.env
+          cp docker-compose.yml $DEPLOY_DIR/docker-compose.yml
+        env:
+          API_ENV_CONTENT: ${{ secrets.API_PRODUCTION_ENV }}
+
       - name: Prisma Migration
         working-directory: backend
         run: |
@@ -54,11 +66,11 @@ jobs:
 
             IMAGE_ID=$(docker build -q .)
             trap 'docker image rm "$IMAGE_ID" || true' EXIT
-            docker run --rm --entrypoint /bin/sh "$IMAGE_ID" -c '
+            docker run --rm --env-file "$DEPLOY_DIR/.env" --entrypoint /bin/sh "$IMAGE_ID" -c '
                 set -eux
                 npm run prisma:generate
-                npm run prisma:migrate:deploy:dev
-                npm run prisma:seed
+                npm run prisma:migrate:prod
+                npm run prisma:seed:prod
             '
 
       - name: Build and push image
@@ -76,20 +88,8 @@ jobs:
         env:
           TAG: ${{ github.run_number }}
 
-      - name: Write production .env and compose file
-        working-directory: backend
-        run: |
-          set -eu
-          mkdir -p $DEPLOY_DIR
-          umask 077
-          printf '%s' "$API_ENV_CONTENT" > $DEPLOY_DIR/.env
-          chmod 600 $DEPLOY_DIR/.env
-          cp docker-compose.yml $DEPLOY_DIR/docker-compose.yml
-        env:
-          API_ENV_CONTENT: ${{ secrets.API_PRODUCTION_ENV }}
-
       - name: Deploy
         run: |
           set -eu
-          docker compose -f $DEPLOY_DIR/docker-compose.yml pull $IMAGE_NAME
+          docker compose -f $DEPLOY_DIR/docker-compose.yml pull
           docker compose -f $DEPLOY_DIR/docker-compose.yml up -d --remove-orphans

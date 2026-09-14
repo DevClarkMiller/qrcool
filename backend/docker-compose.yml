@@ -1,6 +1,6 @@
 services:
   qrcool:
-    image: ghcr.io/devclarkmiller/qrcool:${IMAGE_TAG:-latest}
+    image: ghcr.io/orgclarkmiller/qrcool:${IMAGE_TAG:-latest}
     pull_policy: always
     container_name: qrcool
     restart: unless-stopped

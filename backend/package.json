@@ -14,6 +14,7 @@
     "prisma:migrate:deploy:dev": "dotenv -e .env.development -- npx prisma migrate deploy",
     "prisma:migrate:prod": "dotenv -e .env.production -- npx prisma migrate deploy",
     "prisma:seed": "dotenv -e .env.development -- npx tsx prisma/seed.ts",
+    "prisma:seed:prod": "dotenv -e .env.production -- npx tsx prisma/seed.ts",
     "prisma:studio": "npx prisma studio",
     "db:reset": "npx prisma migrate reset --force",
     "test:dev": "cross-env NODE_ENV=development tsc && jest",
