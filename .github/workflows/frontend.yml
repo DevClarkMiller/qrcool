@@ -1,0 +1,99 @@
+name: Frontend
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'frontend/src/**'
+      - 'frontend/package.json'
+      - 'frontend/package-lock.json'
+      - 'frontend/nginx.conf'
+      - '.github/workflows/frontend.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontend-deploy
+  cancel-in-progress: true
+
+env:
+  PROD_DOMAIN: site.qrcool.ca
+
+jobs:
+  changes:
+    runs-on: 
+      group: miller-server-runners
+    outputs:
+      app: ${{ steps.filter.outputs.app }}
+      nginx: ${{ steps.filter.outputs.nginx }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect changed paths
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            app:
+              - 'frontend/src/**'
+              - 'frontend/package.json'
+              - 'frontend/package-lock.json'
+              - '.github/workflows/frontend.yml'
+            nginx:
+              - 'ci/nginx.conf'
+              - '.github/workflows/frontend.yml'
+
+  build-and-deploy:
+    needs: changes
+    if: needs.changes.outputs.app == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: 
+      group: miller-server-runners
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Write frontend .env
+        working-directory: frontend
+        run: printf '%s' "$CLIENT_ENV_CONTENT" > .env.production
+        env:
+          CLIENT_ENV_CONTENT: ${{ secrets.CLIENT_PRODUCTION_ENV }}
+
+      - name: Install dependencies
+        working-directory: frontend
+        run: NODE_ENV=development npm ci
+
+      - name: Vulnerability check
+        working-directory: frontend
+        run: npm audit --audit-level=high
+
+      - name: Build
+        working-directory: frontend
+        run: npm run build:prod
+
+      - name: Deploy static files
+        run: |
+          set -eu
+          mkdir -p /var/www/${PROD_DOMAIN}/html
+          cp -r frontend/dist/* /var/www/${PROD_DOMAIN}/html
+
+  update-nginx:
+    needs: changes
+    if: needs.changes.outputs.nginx == 'true' || github.event_name == 'workflow_dispatch'
+    runs-on: 
+      group: miller-server-runners
+    env:
+      NGINX_BASE_PATH: /opt/nginx
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update nginx config and reload
+        run: |
+          set -eu
+          cp ci/nginx.conf ${NGINX_BASE_PATH}/sites-available/${PROD_DOMAIN}
+          cd $NGINX_BASE_PATH/sites-enabled
+          ln -sfn ../sites-available/${PROD_DOMAIN} $PROD_DOMAIN
+          docker exec nginx nginx -s reload
