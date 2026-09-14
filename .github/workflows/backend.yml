@@ -1,0 +1,95 @@
+name: Backend
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yml'
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: backend-deploy
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: orgclarkmiller/qrcool
+  DEPLOY_DIR: /srv/qrcool
+
+jobs:
+  build-test-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run tests
+        working-directory: backend
+        run: |
+          set -eux
+
+          IMAGE_ID=$(docker build -q --target test .)
+          trap 'docker image rm "$IMAGE_ID" || true' EXIT
+          docker run --rm --entrypoint /bin/sh "$IMAGE_ID" -c '
+            set -eux
+            echo "[Test] Development"
+            npm run test:dev
+          '
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Prisma Migration
+        working-directory: backend
+        run: |
+            set -eux
+
+            IMAGE_ID=$(docker build -q .)
+            trap 'docker image rm "$IMAGE_ID" || true' EXIT
+            docker run --rm --entrypoint /bin/sh "$IMAGE_ID" -c '
+                set -eux
+                npm run prisma:generate
+                npm run prisma:migrate:deploy:dev
+                npm run prisma:seed
+            '
+
+      - name: Build and push image
+        working-directory: backend
+        run: |
+          set -eux
+          docker rmi ${REGISTRY}/${IMAGE_NAME}:${TAG} ${REGISTRY}/${IMAGE_NAME}:latest || true
+          docker build --no-cache \
+            -t ${REGISTRY}/${IMAGE_NAME}:${TAG} \
+            -t ${REGISTRY}/${IMAGE_NAME}:latest \
+            .
+          docker push ${REGISTRY}/${IMAGE_NAME}:${TAG}
+          docker push ${REGISTRY}/${IMAGE_NAME}:latest
+          docker image rm ${REGISTRY}/${IMAGE_NAME}:${TAG} ${REGISTRY}/${IMAGE_NAME}:latest || true
+        env:
+          TAG: ${{ github.run_number }}
+
+      - name: Write production .env and compose file
+        working-directory: backend
+        run: |
+          set -eu
+          mkdir -p $DEPLOY_DIR
+          umask 077
+          printf '%s' "$API_ENV_CONTENT" > $DEPLOY_DIR/.env
+          chmod 600 $DEPLOY_DIR/.env
+          cp docker-compose.yml $DEPLOY_DIR/docker-compose.yml
+        env:
+          API_ENV_CONTENT: ${{ secrets.API_PRODUCTION_ENV }}
+
+      - name: Deploy
+        run: |
+          set -eu
+          docker compose -f $DEPLOY_DIR/docker-compose.yml pull $IMAGE_NAME
+          docker compose -f $DEPLOY_DIR/docker-compose.yml up -d --remove-orphans
