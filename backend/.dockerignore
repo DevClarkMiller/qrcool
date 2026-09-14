@@ -13,3 +13,9 @@ node_modules
 .gitignore
 .vscode
 .git
+
+.env.development
+.env.production
+.env.test
+.env.example
+Jenkinsfile

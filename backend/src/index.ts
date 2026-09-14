@@ -49,7 +49,14 @@ app.use('/api/entryView', entryViewRouter);
 app.use('/', mainRouter);
 
 (async () => {
-    console.log(`There are ${await AppContext.DB.account.count()} accounts in the database`);
+    try {
+        console.log(`There are ${await AppContext.DB.account.count()} accounts in the database`);
+    } catch (err) {
+        console.error('Failed to reach the database on startup:', err);
+    }
 })();
 
-AppContext.StartServer(port, process.env.SERVER_URL);
+if (process.env.SERVER_URL)
+    AppContext.StartServer(port, process.env.SERVER_URL);
+else
+    console.error("Server URL invalid");

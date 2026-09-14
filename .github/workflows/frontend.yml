@@ -2,7 +2,7 @@ name: Frontend
 
 on:
   push:
-    branches: [master]
+    branches: [main]
     paths:
       - 'frontend/src/**'
       - 'frontend/package.json'
