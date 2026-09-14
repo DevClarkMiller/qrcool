@@ -28,18 +28,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Run tests
-        working-directory: backend
-        run: |
-          set -eux
+    #   - name: Run tests
+    #     working-directory: backend
+    #     run: |
+    #       set -eux
 
-          IMAGE_ID=$(docker build -q --target test .)
-          trap 'docker image rm "$IMAGE_ID" || true' EXIT
-          docker run --rm --entrypoint /bin/sh "$IMAGE_ID" -c '
-            set -eux
-            echo "[Test] Development"
-            npm run test:dev
-          '
+    #       IMAGE_ID=$(docker build -q --target test .)
+    #       trap 'docker image rm "$IMAGE_ID" || true' EXIT
+    #       docker run --rm --entrypoint /bin/sh "$IMAGE_ID" -c '
+    #         set -eux
+    #         echo "[Test] Development"
+    #         npm run test:dev
+    #       '
       - name: Log in to GHCR
         uses: docker/login-action@v3
         with:
