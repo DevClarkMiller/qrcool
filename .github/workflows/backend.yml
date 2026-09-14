@@ -69,8 +69,12 @@ jobs:
             docker run --rm --env-file "$DEPLOY_DIR/.env" --network web --entrypoint /bin/sh "$IMAGE_ID" -c '
                 set -eux
                 npm run prisma:generate
-                npm run prisma:migrate:prod
-                npm run prisma:seed:prod
+                if npm run --silent prisma:status:prod | grep -q "Database schema is up to date"; then
+                  echo "No pending migrations, skipping deploy and seed"
+                else
+                  npm run prisma:migrate:prod
+                  npm run prisma:seed:prod
+                fi
             '
 
       - name: Build and push image
